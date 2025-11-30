@@ -1,5 +1,5 @@
 import {getIronSession, IronSession, SessionOptions} from "iron-session";
-import { cookies } from "next/headers";
+import {cookies} from "next/headers";
 
 
 export const sessionOptions: SessionOptions = {
@@ -16,7 +16,7 @@ export interface SessionData {
     spotifyID: string,
 }
 
-export async function getSessionData() : Promise<IronSession<SessionData>> {
+export async function getSessionData(): Promise<IronSession<SessionData>> {
     const cookieStore = await cookies();
     return getIronSession<SessionData>(cookieStore, sessionOptions);
 }
