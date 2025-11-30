@@ -2,7 +2,7 @@ import {getSessionData} from "@/lib/session";
 import {supabase} from "@/lib/supabase";
 
 
-export async function ensureAccessToken() {
+export async function getAccessToken(): Promise<string> {
     const session = await getSessionData();
     const internalUUID = session.internalUUID;
 
@@ -15,7 +15,7 @@ export async function ensureAccessToken() {
     const epoch = tokenData.expires_at;
 
     if (epoch > Date.now()) {
-        return;
+        return tokenData.access_token;
     }
     const refresh_token = tokenData.refresh_token;
 
@@ -25,10 +25,10 @@ export async function ensureAccessToken() {
         "refresh_token": refresh_token,
     });
 
-    const res = await fetch("https://accounts.spotify.com/api/token",{
+    const res = await fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
         headers: {
-            Authorization : `Basic ${basicAuth}`,
+            Authorization: `Basic ${basicAuth}`,
             "Content-Type": "application/x-www-form-urlencoded"
         },
         body: body
@@ -38,14 +38,18 @@ export async function ensureAccessToken() {
     const data = await res.json();
     console.log(data);
 
-    await supabase
+    const {data: newTokenData} = await supabase
         .from("tokens")
         .update({
             access_token: data.access_token,
             expires_at: Date.now() + data.expires_in * 1000
         })
-        .eq("user_id", internalUUID);
+        .eq("user_id", internalUUID)
+        .select()
+        .single();
 
+
+    return newTokenData.access_token;
 
 
 }
