@@ -54,39 +54,5 @@ export async function getAccessToken(): Promise<string> {
 
 }
 
-/*async function refreshToken(refresh_token : string) {
-    const session = await getSessionData();
-    const internalUUID = session.internalUUID;
-
-    const basicAuth = Buffer.from(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`).toString("base64");
-    const body = new URLSearchParams({
-        "grant_type": "refresh_token",
-        "refresh_token": refresh_token,
-    });
-
-
-    const res = await fetch("https://accounts.spotify.com/api/token",{
-        method: "POST",
-        headers: {
-            Authorization : `Basic ${basicAuth}`,
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: body
-    });
-
-
-    const data = await res.json();
-    console.log(data);
-
-    await supabase
-        .from("tokens")
-        .update({
-            access_token: data.access_token,
-            expires_at: Date.now() + data.expires_in * 1000
-        })
-        .eq("user_id", internalUUID);
-
-
-}*/
 
 

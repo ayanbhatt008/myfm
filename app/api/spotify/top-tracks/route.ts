@@ -1,12 +1,13 @@
-import {getAccessToken} from "@/lib/spotify";
+import {getAccessToken,} from "@/lib/spotify/api";
 import {NextResponse} from "next/server";
+
 
 
 export async function GET() {
     const access_token : string = await getAccessToken();
 
     const params = new URLSearchParams({
-        limit: "1",
+        limit: "2",
         time_range: "long_term"
     });
 
@@ -23,7 +24,9 @@ export async function GET() {
     const data = await res.json();
 
 
-    console.log("from route.ts", data)
+
 
     return NextResponse.json(data);
 }
+
+
