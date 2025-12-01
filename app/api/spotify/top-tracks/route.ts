@@ -1,4 +1,6 @@
 import {getAccessToken,} from "@/lib/spotify/api";
+import { mapSpotifyTopTracksResponse } from "@/lib/spotify/mapper";
+import { SpotifyTopTrackResponse } from "@/lib/spotify/types";
 import {NextResponse} from "next/server";
 
 
@@ -23,10 +25,11 @@ export async function GET() {
 
     const data = await res.json();
 
+    const response :SpotifyTopTrackResponse = mapSpotifyTopTracksResponse(data);
+    console.log("from route", response)
 
 
-
-    return NextResponse.json(data);
+    return NextResponse.json(response);
 }
 
 
