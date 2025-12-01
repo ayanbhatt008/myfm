@@ -1,16 +1,10 @@
 "use client";
 
-import React, {useState} from "react";
+import React from "react";
 import Image from "next/image";
 
 export default function Home() {
-    const [response, setResponse] = useState("def");
 
-
-    const handleSubmit = async () => {
-
-        window.location.href = "/api/auth/login";
-    }
 
 
     return (

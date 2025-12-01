@@ -65,7 +65,7 @@ export async function GET(req: Request) {
     }
 
 
-    const {data: tokenData, error} = await supabase
+    await supabase
         .from("tokens")
         .upsert({
             user_id: internalUUID,

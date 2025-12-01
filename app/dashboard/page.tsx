@@ -1,16 +1,25 @@
-import {getSessionData} from "@/lib/session";
-import {redirect} from "next/navigation";
+"use client"
 
 
-export default async function Dashboard() {
 
 
-    const session = await getSessionData();
-    if (!session.internalUUID)
-        redirect("/")
+export default  function Dashboard() {
 
+
+
+
+
+    const handleClick = async function () {
+        const res = await fetch("/api/spotify/top-tracks")
+        if (!res.ok) console.log("no ok")
+        const data = await res.json()
+        console.log("from page", data)
+
+    }
 
     return (
-        <div className="bg-blue-900 text-2xl text-white text-center"> {}</div>
+        <div className="bg-blue-900 text-2xl text-white text-center">
+            <button onClick={handleClick}>HI</button>
+        </div>
     )
 }
