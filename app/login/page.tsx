@@ -1,6 +1,9 @@
 "use client"
 import {supabase} from "@/lib/supabase"
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
+import {useRouter} from "next/navigation";
+
+
 
 export default function AuthPage() {
     const [isLogin, setIsLogin] = useState(true);
@@ -9,6 +12,17 @@ export default function AuthPage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [username, setUsername] = useState("");
+    const router = useRouter();
+
+    useEffect(()=> {
+        supabase.auth.getUser()
+            .then(({data: { user}, error}) => {
+                if (error)
+                    console.error(error.message);
+                else
+                    router.push("/dashboard");
+            })
+    }, [])
 
     async function handleSubmit(e: React.FormEvent): Promise<void> {
         e.preventDefault();
@@ -36,7 +50,8 @@ export default function AuthPage() {
         setLoading(false);
 
 
-
+        if (!error)
+            router.push("/dashboard")
     }
 
     return (

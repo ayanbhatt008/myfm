@@ -1,6 +1,6 @@
 import {NextResponse} from "next/server";
 import {getSessionData} from "@/lib/session";
-import {supabase} from "@/lib/supabase";
+import {supabase, supabaseServer} from "@/lib/supabase";
 
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
@@ -40,35 +40,20 @@ export async function GET(req: Request) {
 
     const profile = await res.json();
 
-    const {data: userData} = await supabase
-        .from("users")
-        .select("*")
-        .eq("spotify_id", profile.id)
-        .single();
+    const {data: {user}, error} = await supabaseServer.auth.getUser();
 
-    let internalUUID: String = userData?.id;
+    console.log(error);
+    console.log(user?.id)
 
+    return;
 
-    if (!userData) {
-        const {data: userData} = await supabase
-            .from("users")
-            .insert({
-                spotify_id: profile.id,
-                name: profile.display_name
-            })
-            .select()
-            .single();
-
-        internalUUID = userData?.id;
-
-
-    }
-
+    if (error)
+        NextResponse.redirect(`${process.env.NEXT_BASE_URL}/login`)
 
     await supabase
-        .from("tokens")
+        .from("spotify_tokens")
         .upsert({
-            user_id: internalUUID,
+            user_id: user?.id,
             access_token: tokens.access_token,
             refresh_token: tokens.refresh_token,
             expires_at: expiresAt
@@ -78,7 +63,7 @@ export async function GET(req: Request) {
 
     const session = await getSessionData();
 
-    session.internalUUID = internalUUID.toString();
+    session.internalUUID = user!.id.toString();
     session.spotifyID = profile.id;
 
 

@@ -7,7 +7,7 @@ export async function getAccessToken(): Promise<string> {
     const internalUUID = session.internalUUID;
 
     const {data: tokenData} = await supabase
-        .from("tokens")
+        .from("spotify_tokens")
         .select("*")
         .eq("user_id", internalUUID)
         .single();
@@ -39,7 +39,7 @@ export async function getAccessToken(): Promise<string> {
     console.log(data);
 
     const {data: newTokenData} = await supabase
-        .from("tokens")
+        .from("spotify_tokens")
         .update({
             access_token: data.access_token,
             expires_at: Date.now() + data.expires_in * 1000
