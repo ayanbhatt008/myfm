@@ -4,8 +4,20 @@ import Image from "next/image";
 
 
 import {SpotifyTopTrackResponse} from "@/lib/spotify/types";
+import {useState, useEffect} from "react";
+import { createClient } from "@/lib/supabase/client";
 
 export default  function Dashboard() {
+    const supabase = createClient();
+    const [spotifyLoggedIn, setSpotifyLoggedIn] = useState(false);
+
+    useEffect(() => {
+        const {data, error} = supabase
+            .from("spotify_tokens")
+            .select("*")
+            .eq("user_id", )
+    }, [])
+
 
 
 
