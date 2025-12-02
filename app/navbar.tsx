@@ -17,7 +17,7 @@ export default function NavBar() {
                 </div>
 
 
-                <a href={"/api/auth/login"} className={"text-sm"}> Login </a>
+                <a href={"/login"} className={"text-sm"}> Login </a>
 
 
             </div>

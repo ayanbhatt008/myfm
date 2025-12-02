@@ -26,7 +26,7 @@ export async function GET() {
     const data = await res.json();
 
     const response :SpotifyTopTrackResponse = mapSpotifyTopTracksResponse(data);
-    console.log("from route", response)
+
 
 
     return NextResponse.json(response);

@@ -3,6 +3,8 @@
 
 
 
+import {SpotifyTopTrackResponse} from "@/lib/spotify/types";
+
 export default  function Dashboard() {
 
 
@@ -12,7 +14,7 @@ export default  function Dashboard() {
     const handleClick = async function () {
         const res = await fetch("/api/spotify/top-tracks")
         if (!res.ok) console.log("no ok")
-        const data = await res.json()
+        const data : SpotifyTopTrackResponse = await res.json()
         console.log("from page", data)
 
     }

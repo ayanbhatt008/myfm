@@ -4,7 +4,7 @@ import {supabase} from "@/lib/supabase";
 
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
-const REDIRECT_URI = `${process.env.NEXT_BASE_URL}api/auth/callback`;
+const REDIRECT_URI = `${process.env.NEXT_BASE_URL}api/auth/spotify/callback`;
 
 export async function GET(req: Request) {
     const url = new URL(req.url);
