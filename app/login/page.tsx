@@ -1,7 +1,8 @@
 "use client"
-import {supabase} from "@/lib/supabase"
+import {createClient} from "@/lib/supabase/client"
 import React, {useState, useEffect} from "react";
 import {useRouter} from "next/navigation";
+import { SupabaseClient } from "@supabase/supabase-js";
 
 
 
@@ -14,11 +15,14 @@ export default function AuthPage() {
     const [username, setUsername] = useState("");
     const router = useRouter();
 
+    const supabase = createClient();
+
     useEffect(()=> {
+        
         supabase.auth.getUser()
             .then(({data: { user}, error}) => {
                 if (error)
-                    console.error(error.message);
+                    console.log(error.message);
                 else
                     router.push("/dashboard");
             })

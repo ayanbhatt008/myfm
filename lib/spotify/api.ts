@@ -1,5 +1,5 @@
 import {getSessionData} from "@/lib/session";
-import {supabase} from "@/lib/supabase";
+import {supabase} from "@/lib/supabase/supabase";
 
 
 export async function getAccessToken(): Promise<string> {
