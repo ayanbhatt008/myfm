@@ -1,5 +1,5 @@
 import {NextResponse} from "next/server";
-import {getSessionData} from "@/lib/session";
+
 import { createClient } from "@/lib/supabase/server";
 
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
@@ -30,7 +30,7 @@ export async function GET(req: Request) {
 
     const tokens = await tokenResponse.json();
 
-    const expiresAt = Date.now() + tokens.expires_in * 1000;
+    const expiresAt = Date.now() + tokens.expires_in * 950;
 
 
     const res = await fetch("https://api.spotify.com/v1/me", {
@@ -41,32 +41,31 @@ export async function GET(req: Request) {
 
     const profile = await res.json();
 
-    const {data: {user}} = await supabase.auth.getUser();
 
+    const {data: {user}, error} = await supabase.auth.getUser();
+
+    
+    console.log(error);
     
 
     
 
-    
-
-    await supabase
+    const {error: err} = await supabase
         .from("spotify_tokens")
         .upsert({
             user_id: user?.id,
             access_token: tokens.access_token,
             refresh_token: tokens.refresh_token,
-            expires_at: expiresAt
+            expires_at: expiresAt,
+            spotify_id: profile.id!,
+            display_name: profile.display_name
         }, {onConflict: "user_id"})
         .select();
 
-
-    const session = await getSessionData();
-
-    session.internalUUID = user!.id.toString();
-    session.spotifyID = profile.id;
+    console.log(err);
 
 
-    await session.save();
+
 
 
     return NextResponse.redirect(`${process.env.NEXT_BASE_URL}/dashboard`)

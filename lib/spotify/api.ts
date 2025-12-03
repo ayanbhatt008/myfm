@@ -1,10 +1,14 @@
-import {getSessionData} from "@/lib/session";
-import {supabase} from "@/lib/supabase/supabase";
+
+import {createClient} from "@/lib/supabase/server";
 
 
 export async function getAccessToken(): Promise<string> {
-    const session = await getSessionData();
-    const internalUUID = session.internalUUID;
+    const supabase = await createClient();
+    const {data: {user}, error } = await supabase.auth.getUser()
+    if (error)
+        console.log(error);
+
+    const internalUUID = user?.id;
 
     const {data: tokenData} = await supabase
         .from("spotify_tokens")

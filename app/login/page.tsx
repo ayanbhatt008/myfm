@@ -17,15 +17,20 @@ export default function AuthPage() {
 
     const supabase = createClient();
 
+
+
     useEffect(()=> {
         
         supabase.auth.getUser()
             .then(({data: { user}, error}) => {
                 if (error)
                     console.log(error.message);
-                else
+                else {
                     router.push("/dashboard");
+
+                }
             })
+
     }, [])
 
     async function handleSubmit(e: React.FormEvent): Promise<void> {
@@ -57,6 +62,9 @@ export default function AuthPage() {
         if (!error)
             router.push("/dashboard")
     }
+
+
+
 
     return (
         <div className = "flex flex-col items-center p-6">
