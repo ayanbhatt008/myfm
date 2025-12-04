@@ -10,6 +10,8 @@ export function useSpotifyAuth() {
     useEffect(() => {
         const fetchSpotify = async () => {
             const {data: {user}} = await supabase.auth.getUser();
+            
+                console.log(user);
             if (!user)
                 return;
 

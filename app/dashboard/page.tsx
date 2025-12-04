@@ -8,6 +8,7 @@ import {useState, useEffect} from "react";
 import { supabase } from "@/lib/supabase/client";
 import {getSessionData} from "@/lib/session";
 import {useRouter} from "next/navigation"
+import { useSpotifyAuth } from "@/lib/hooks/useSpotifyAuth";
 
 export default  function Dashboard() {
     
@@ -45,35 +46,39 @@ export default  function Dashboard() {
 
 function SpotifyAuth() {
     
-    const [spotifyLoggedIn, setSpotifyLoggedIn] = useState(false);
-    const [spotifyDisplayName, setSpotifyDisplayName] = useState("");
+    const {displayName : spotifyDisplayName, loading} = useSpotifyAuth();
+    // if null = not logged in; if a string then they are logged in
 
-
-    useEffect(() => {
-        const func = async() => {
-            const {data: {user}, error: err} = await supabase.auth.getUser();
-            if (!user)
-                return;
-
-            const {data: data} = await supabase
-                .from("spotify_tokens")
-                .select("display_name")
-                .eq("user_id", user?.id)
-                .maybeSingle();
-
-            if (!data)
-                return;
-
-
-            setSpotifyDisplayName(data.display_name)
-
-            setSpotifyLoggedIn(true);
+    console.log("display name " + spotifyDisplayName + " loading: " + loading);
 
 
 
-        }
-        func();
-    }, []);
+
+    let auth = null;
+
+    if (loading)
+        auth = (<a  className="bg-[#1ED760] rounded-2xl p-5 gap-6 text-white">Loading...</a>)
+    else if (spotifyDisplayName)
+        auth = (
+                    <div className="flex flex-row items-center gap-10">
+                        <div className = "bg-[#1ED760] rounded p-5 gap-6 text-white">
+                            Logged in as {spotifyDisplayName}
+                        </div>
+
+                        <a className = "bg-red-500 rounded-2xl p-5 gap-6 text-white"
+                        href={"/api/auth/spotify/signout"}>
+                            Sign Out
+                        </a>
+                        
+
+                    </div>
+                );
+    else 
+        auth = (
+            <a href={"/api/auth/spotify/login"} className="bg-[#1ED760] rounded-2xl p-5 gap-6 text-white">
+                Log-In with Spotify
+            </a>
+        )
 
     return (
         <div
@@ -88,26 +93,7 @@ function SpotifyAuth() {
                     loading="eager"
                 />
 
-                {!spotifyLoggedIn && (
-                    <a href={"/api/auth/spotify/login"} className="bg-[#1ED760] rounded-2xl p-5 gap-6 text-white">
-                    Log-In with Spotify
-                </a>
-                )}
-
-                {spotifyLoggedIn && (
-                    <div className="flex flex-row items-center gap-10">
-                        <div className = "bg-[#1ED760] rounded p-5 gap-6 text-white">
-                            Logged in as {spotifyDisplayName}
-                        </div>
-
-                        <a className = "bg-red-500 rounded-2xl p-5 gap-6 text-white"
-                        href={"/api/auth/spotify/signout"}>
-                            Sign Out
-                        </a>
-                        
-
-                    </div>
-                )}
+                {auth}
                 
 
 
