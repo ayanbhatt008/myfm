@@ -7,15 +7,19 @@ import {SpotifyTopTrackResponse} from "@/lib/spotify/types";
 import {useState, useEffect} from "react";
 import { createClient } from "@/lib/supabase/client";
 import {getSessionData} from "@/lib/session";
+import {useRouter} from "next/navigation"
 
 export default  function Dashboard() {
+    const supabase = createClient();
+    const router = useRouter();
 
 
 
 
-
-
-
+    async function handleLogout() {
+        await supabase.auth.signOut();
+        router.push("/")
+    }
 
 
 
@@ -27,6 +31,12 @@ export default  function Dashboard() {
             </div>
 
             <SpotifyAuth/>
+            <div className="flex items-center justify-center p-5">
+                <button className = "border border-red-500 border-4 bg-white text-red-500 text-center p-5"
+                onClick={handleLogout}>
+                    SIGN OUT
+                </button>
+            </div>
         </div>
     )
 }
@@ -42,15 +52,17 @@ function SpotifyAuth() {
     useEffect(() => {
         const func = async() => {
             const {data: {user}, error: err} = await supabase.auth.getUser();
+            if (!user)
+                return;
 
             const {data: data} = await supabase
                 .from("spotify_tokens")
                 .select("display_name")
                 .eq("user_id", user?.id)
-                .single();
+                .maybeSingle();
 
             if (!data)
-                return console.log('not logged in')
+                return;
 
 
             setSpotifyDisplayName(data.display_name)
@@ -84,11 +96,14 @@ function SpotifyAuth() {
 
                 {spotifyLoggedIn && (
                     <div className="flex flex-row items-center gap-10">
-                        <text className = "bg-[#1ED760] rounded p-5 gap-6 text-white">
+                        <div className = "bg-[#1ED760] rounded p-5 gap-6 text-white">
                             Logged in as {spotifyDisplayName}
-                        </text>
+                        </div>
 
-                        <a> SIGN OUT TO IMPLEMENT</a>
+                        <a className = "bg-red-500 rounded-2xl p-5 gap-6 text-white"
+                        href={"/api/auth/spotify/signout"}>
+                            Sign Out
+                        </a>
                         
 
                     </div>
