@@ -5,12 +5,18 @@ import {NextResponse} from "next/server";
 
 
 
-export async function GET() {
+export async function GET(req : Request) {
     const access_token : string = await getAccessToken();
 
+    const {searchParams} = new URL(req.url);
+
+    const limit = searchParams.get("limit") ?? "2";
+    const time_range = searchParams.get("time_range") ?? "long_term";
+
+
     const params = new URLSearchParams({
-        limit: "2",
-        time_range: "long_term"
+        limit: limit,
+        time_range: time_range,
     });
 
     const res = await fetch(
