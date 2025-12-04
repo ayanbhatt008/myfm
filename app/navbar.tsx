@@ -3,32 +3,19 @@
 
 import {useEffect, useState} from "react";
 import {supabase} from "@/lib/supabase/client";
+import { useAuth } from "@/lib/hooks/useAuth";
 
 export default function NavBar() {
-    const [isLoggedIn, setIsLoggedIn] = useState<null | "login" | "dashboard">(null);
-    
-
-
-
-    useEffect(() => {
-        async function func() {
-            const {data: {user}, error} = await supabase.auth.getUser()
-
-
-                setIsLoggedIn(user ? "dashboard" : "login");
-        }
-
-        func();
-    }, [])
+    const {user, loading} = useAuth();
 
     let authHref = null;
-    if (!isLoggedIn) {
+    if (loading) {
 
        authHref = (<a  className={"text-sm"}></a>)
     }
-    else if (isLoggedIn == "login")
+    else if (!user)
         authHref = (<a href={"/login"} className={"text-sm"}> Login | Sign Up </a>)
-    else if (isLoggedIn == "dashboard")
+    else if (user)
         authHref = (<a href={"/dashboard"} className={"text-sm"}> Dashboard </a>)
 
 
