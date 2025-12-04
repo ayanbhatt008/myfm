@@ -2,11 +2,11 @@
 
 
 import {useEffect, useState} from "react";
-import {createClient} from "@/lib/supabase/client";
+import {supabase} from "@/lib/supabase/client";
 
 export default function NavBar() {
     const [isLoggedIn, setIsLoggedIn] = useState<null | "login" | "dashboard">(null);
-    const supabase = createClient();
+    
 
 
 

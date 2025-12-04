@@ -5,12 +5,12 @@ import Image from "next/image";
 
 import {SpotifyTopTrackResponse} from "@/lib/spotify/types";
 import {useState, useEffect} from "react";
-import { createClient } from "@/lib/supabase/client";
+import { supabase } from "@/lib/supabase/client";
 import {getSessionData} from "@/lib/session";
 import {useRouter} from "next/navigation"
 
 export default  function Dashboard() {
-    const supabase = createClient();
+    
     const router = useRouter();
 
 
@@ -44,7 +44,7 @@ export default  function Dashboard() {
 
 
 function SpotifyAuth() {
-    const supabase = createClient();
+    
     const [spotifyLoggedIn, setSpotifyLoggedIn] = useState(false);
     const [spotifyDisplayName, setSpotifyDisplayName] = useState("");
 
