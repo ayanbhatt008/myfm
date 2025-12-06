@@ -2,7 +2,7 @@
 import {createClient} from "@/lib/supabase/server";
 
 
-export async function getAccessToken(): Promise<string> {
+export async function getUserAccessToken(): Promise<string> {
     const supabase = await createClient();
     const {data: {user}, error } = await supabase.auth.getUser()
     if (error)
@@ -57,6 +57,8 @@ export async function getAccessToken(): Promise<string> {
 
 
 }
+
+
 
 
 

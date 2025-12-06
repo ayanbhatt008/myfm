@@ -63,7 +63,7 @@ Music Service Stat Tracker
 
 - "/lib/spotify"
   - 
-  - "/lib/spotify/api.ts"
+  - "/lib/spotify/userAccessToken.ts"
     - Method dealing with Spotify API
       - getAccessToken() : return a refreshed (if needed) access token for use
   - 

@@ -1,4 +1,4 @@
-import {getAccessToken,} from "@/lib/spotify/api";
+import {getUserAccessToken,} from "@/lib/spotify/userAccessToken";
 import { mapSpotifyTopTracksResponse } from "@/lib/spotify/mapper";
 import { SpotifyTopTrackResponse } from "@/lib/spotify/types";
 import {NextResponse} from "next/server";
@@ -6,7 +6,7 @@ import {NextResponse} from "next/server";
 
 
 export async function GET(req : Request) {
-    const access_token : string = await getAccessToken();
+    const access_token : string = await getUserAccessToken();
 
     const {searchParams} = new URL(req.url);
 
