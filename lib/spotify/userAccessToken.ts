@@ -40,7 +40,7 @@ export async function getUserAccessToken(): Promise<string> {
 
 
     const data = await res.json();
-    console.log(data);
+
 
     const {data: newTokenData} = await supabase
         .from("spotify_tokens")

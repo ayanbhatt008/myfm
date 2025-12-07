@@ -11,7 +11,7 @@ export function useSpotifyAuth() {
         const fetchSpotify = async () => {
             const {data: {user}} = await supabase.auth.getUser();
             
-                console.log(user);
+
             if (!user)
                 return;
 
@@ -28,7 +28,7 @@ export function useSpotifyAuth() {
         };
 
         fetchSpotify();
-    });
+    }, []);
 
 
     return {displayName, loading};

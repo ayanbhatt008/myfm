@@ -1,6 +1,6 @@
 "use client"
-import {supabase} from "@/lib/supabase/client"
-import {useState, useEffect, use} from "react";
+
+import {useState, useEffect} from "react";
 
 import TrackCard from "@/lib/ components/track-card";
 import {SpotifyTopTrackResponse} from "@/lib/spotify/types";

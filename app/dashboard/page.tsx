@@ -49,7 +49,7 @@ function SpotifyAuth() {
     const {displayName : spotifyDisplayName, loading} = useSpotifyAuth();
     // if null = not logged in; if a string then they are logged in
 
-    console.log("display name " + spotifyDisplayName + " loading: " + loading);
+
 
 
 

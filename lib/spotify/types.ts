@@ -13,6 +13,17 @@ export interface SpotifyArtist {
     name: string;
     type?: string | null;
 
+    followers?: {
+        href: any;
+        total: number;
+    }
+
+    genres?: string[],
+    images?: SpotifyImage[],
+    popularity?: number,
+    uri?: string,
+
+
 }
 
 
@@ -63,5 +74,16 @@ export interface SpotifyTopTrackResponse {
     href?: string | null;
     next?: string | null;
     previous?: string | null;
+}
+
+export interface SpotifyArtistQueryResponse {
+    href?: string,
+    limit: number,
+    next?: string,
+    offset?: number,
+    previous? : any, // TO BE FIXED
+    total? : number,
+    items: SpotifyArtist[],
+
 }
 
