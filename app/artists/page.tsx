@@ -6,7 +6,7 @@ import {mapSpotifyArtistQueryResponse} from "@/lib/spotify/mapper";
 import ArtistCard from "@/lib/ components/artist-card";
 
 export default function SearchPage() {
-    const [loading, setLoading] = useState(false);
+    const [queryLoading, setQueryLoading] = useState(false);
     const [query, setQuery] = useState("");
     const [lastQuery, setLastQuery] = useState("");
     const [results , setResults] = useState<null | SpotifyArtistQueryResponse>(null);
@@ -16,7 +16,7 @@ export default function SearchPage() {
         if (query == lastQuery) {
             return;
         }
-        setLoading(true);
+        setQueryLoading(true);
         setLastQuery(query);
 
 
@@ -29,10 +29,16 @@ export default function SearchPage() {
 
 
         setResults(data);
-        setLoading(false);
+        setQueryLoading(false);
 
 
     }
+
+
+
+
+
+
 
     return (
         <div className="min-h-screen bg-white  flex flex-col items-center">
@@ -50,7 +56,7 @@ export default function SearchPage() {
                 />
                 <button
                     type="submit"
-                    disabled={loading}
+                    disabled={queryLoading}
                     className="bg-blue-600 px-4 py-2 rounded-r-xl hover:bg-blue-700 transition"
                 >
                     Search
@@ -60,7 +66,7 @@ export default function SearchPage() {
             <div className={"flex-col w-auto p-2 mt-16 "}>
 
                 {results && results.items.map((item, i) => (
-                    <ArtistCard key = {item.id} artist={item}/>
+                    <ArtistCard key = {item.id} artist={item} followed={false}/>
                 ))
 
 

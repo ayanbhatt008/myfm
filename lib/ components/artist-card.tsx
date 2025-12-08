@@ -4,7 +4,7 @@ import formatNames from "@/lib/utils/format-names";
 import Image from "next/image";
 
 
-export default function ArtistCard( {artist }: {artist : SpotifyArtist}) {
+export default function ArtistCard( {artist, followed}: {artist : SpotifyArtist, followed : boolean}) {
 
 
     /*const trackName : string = track.name;
@@ -51,11 +51,19 @@ export default function ArtistCard( {artist }: {artist : SpotifyArtist}) {
             </div>
 
             <div className={"flex flex-col justify-center w-30 h-20"}>
-                <button
-                    className={"rounded-2xl text-white bg" +
-                        "-amber-500 font-bold p-2 transition hover:bg-amber-700 "}>
-                    Follow
-                </button>
+                {followed ?
+                    <button
+                        className={"rounded-2xl text-white bg-amber-500 font-bold p-2 transition hover:bg-amber-700 "}>
+                        Unfollow
+                    </button>
+                    :
+                    <button
+                        className={"rounded-2xl text-white bg-amber-500 font-bold p-2 transition hover:bg-amber-700 "}>
+                        Follow
+                    </button>
+
+                }
+
             </div>
 
         </div>
