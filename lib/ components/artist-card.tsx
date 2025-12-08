@@ -2,6 +2,7 @@
 import {SpotifyAlbum, SpotifyArtist, SpotifyImage, SpotifyTrack} from "@/lib/spotify/types";
 import formatNames from "@/lib/utils/format-names";
 import Image from "next/image";
+import { supabase } from "../supabase/client";
 
 
 export default function ArtistCard( {artist, followed}: {artist : SpotifyArtist, followed : boolean}) {
@@ -26,6 +27,20 @@ export default function ArtistCard( {artist, followed}: {artist : SpotifyArtist,
 
     const image: SpotifyImage = artist.images![2]
 
+    const toggleFollow = async () => {
+        const url = followed ? 'api/spotify/unfollow' : 'api/spotify/follow' 
+
+        const{data: {user}} = await supabase.auth.getUser();
+
+        const params = new URLSearchParams({
+        response_type: "code",
+        client_id: CLIENT_ID!,
+        scope: scope,
+        redirect_uri: REDIRECT_URI,
+        show_dialog: show_dialog,
+        });
+
+    }
 
 
 
