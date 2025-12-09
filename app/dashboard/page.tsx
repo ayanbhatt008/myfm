@@ -12,6 +12,7 @@ export default function Dashboard() {
             
             const res = await fetch("/api/spotify/followed-artists");
             const data : SpotifyArtist[] = await res.json();
+            const sorted_data = data.sort((a, b) => a.name.localeCompare(b.name))
             
             setArtistsToDisplay(data);
             setLoading(false);
