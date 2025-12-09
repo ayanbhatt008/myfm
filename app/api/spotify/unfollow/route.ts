@@ -9,15 +9,12 @@ export async function GET(req: Request) {
 
     await supabase
         .from("artist_follows")
-        .insert([
-            {
-                user_id: user_id,
-                artist_id: artist_id,
+        .delete()
+        .eq("artist_id", artist_id)
+        .eq("user_id", user_id);
 
-            }
-        ]);
 
     return NextResponse.json({artist_id: artist_id});
 
-    
+
 }

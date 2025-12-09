@@ -3,11 +3,12 @@ import {SpotifyAlbum, SpotifyArtist, SpotifyImage, SpotifyTrack} from "@/lib/spo
 import formatNames from "@/lib/utils/format-names";
 import Image from "next/image";
 import { supabase } from "../supabase/client";
+import {useState} from "react";
 
 
-export default function ArtistCard( {artist, followed}: {artist : SpotifyArtist, followed : boolean}) {
+export default function ArtistQueryCard({artist, followed}: {artist : SpotifyArtist, followed : boolean}) {
 
-
+    const [isFollowed, setIsFollowed] = useState(followed);
     /*const trackName : string = track.name;
     const external_url = track.external_url.spotify;
 
@@ -25,20 +26,27 @@ export default function ArtistCard( {artist, followed}: {artist : SpotifyArtist,
     const artistName : string = artist.name;
     const external_url = artist.external_url.spotify;
 
-    const image: SpotifyImage = artist.images![2]
+    const image: SpotifyImage = artist.images![2];
 
     const toggleFollow = async () => {
-        const url = followed ? 'api/spotify/unfollow' : 'api/spotify/follow' 
+        const url = isFollowed ? 'api/spotify/unfollow' : 'api/spotify/follow';
 
         const{data: {user}} = await supabase.auth.getUser();
 
+        if (!user)
+            return;
+
         const params = new URLSearchParams({
-        response_type: "code",
-        client_id: CLIENT_ID!,
-        scope: scope,
-        redirect_uri: REDIRECT_URI,
-        show_dialog: show_dialog,
+            user_id: user.id,
+            artist_id: artist.id
         });
+
+        const res = await fetch(`${url}/?${params.toString()}`);
+
+        const data = await res.json();
+
+        setIsFollowed(!isFollowed);
+
 
     }
 
@@ -65,14 +73,14 @@ export default function ArtistCard( {artist, followed}: {artist : SpotifyArtist,
 
             </div>
 
-            <div className={"flex flex-col justify-center w-30 h-20"}>
-                {followed ?
-                    <button
+            <div className={"flex flex-col justify-center w-30 h-20"} >
+                {isFollowed ?
+                    <button onClick={toggleFollow}
                         className={"rounded-2xl text-white bg-amber-500 font-bold p-2 transition hover:bg-amber-700 "}>
                         Unfollow
                     </button>
                     :
-                    <button
+                    <button onClick={toggleFollow}
                         className={"rounded-2xl text-white bg-amber-500 font-bold p-2 transition hover:bg-amber-700 "}>
                         Follow
                     </button>

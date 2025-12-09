@@ -3,7 +3,7 @@
 import {useState} from "react";
 import {SpotifyArtistQueryResponse} from "@/lib/spotify/types";
 import {mapSpotifyArtistQueryResponse} from "@/lib/spotify/mapper";
-import ArtistCard from "@/lib/ components/artist-card";
+import ArtistQueryCard from "@/lib/ components/artist-query-card";
 import { supabase } from "@/lib/supabase/client";
 
 export default function SearchPage() {
@@ -11,6 +11,7 @@ export default function SearchPage() {
     const [query, setQuery] = useState("");
     const [lastQuery, setLastQuery] = useState("");
     const [results , setResults] = useState<null | SpotifyArtistQueryResponse>(null);
+    const [followIDs, setFollowIDs] = useState<string[]>([]);
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) : Promise<void> {
         e.preventDefault();
@@ -35,9 +36,11 @@ export default function SearchPage() {
             .eq("user_id", user?.id)
 
 
-            
-        if (!error) 
-            console.log(follows);
+        const followIds = follows?.map(obj => obj.artist_id) || []
+        setFollowIDs(followIds);
+
+
+
         
         
 
@@ -85,7 +88,7 @@ export default function SearchPage() {
             <div className={"flex-col w-auto p-2 mt-16 "}>
 
                 {results && results.items.map((item, i) => (
-                    <ArtistCard key = {item.id} artist={item} followed={false}/>
+                    <ArtistQueryCard key = {item.id} artist={item} followed={followIDs.includes(item.id)} />
                 ))
 
 
