@@ -22,7 +22,7 @@ export async function GET() {
     if (deleteError)
         console.log(deleteError);
 
-    return NextResponse.redirect(`${process.env.NEXT_BASE_URL}/dashboard`);
+    return NextResponse.redirect(`${process.env.NEXT_BASE_URL}/settings`);
 
 
 }
