@@ -1,4 +1,5 @@
 "use client"
+import ArtistDashboardCard from "@/lib/ components/artist-dashboard-card";
 import {SpotifyArtist} from "@/lib/spotify/types";
 import {useEffect, useState} from "react";
 
@@ -8,9 +9,13 @@ export default function Dashboard() {
 
     useEffect(() => {
         async function func() {
+            
             const res = await fetch("/api/spotify/followed-artists");
-            const data = await res.json();
-            console.log(data);
+            const data : SpotifyArtist[] = await res.json();
+            
+            setArtistsToDisplay(data);
+            setLoading(false);
+            
 
         }
 
@@ -23,6 +28,17 @@ export default function Dashboard() {
             <div> loading...</div>
         )
     }
+
+    return (
+        <div className="min-h-screen flex items-center justify-center">
+            <div className="w-80 flex flex-grid items-center justify-center">
+                {artistsToDisplay.map((artist) => 
+                    <ArtistDashboardCard key={artist.id} artist = {artist} />
+                )}
+            </div>
+        </div>
+    )
+
 
 
 }

@@ -9,7 +9,7 @@ import {
 } from "@/lib/spotify/types";
 
 
-function mapSpotifyArtist(artist: any): SpotifyArtist {
+export function mapSpotifyArtist(artist: any): SpotifyArtist {
     return {
         external_url: {
             spotify: artist.external_urls.spotify
