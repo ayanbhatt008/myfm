@@ -11,7 +11,7 @@ export async function GET(req: Request) {
     return withAPIWrapper(
         async (user, req) => {
             const access_token : string = await getUserAccessToken();
-            const {searchParams} = new URL(req.url);
+            const {searchParams} = new URL(req!.url);
             const limit = searchParams.get("limit") ?? "2";
             const time_range = searchParams.get("time_range") ?? "long_term";
 

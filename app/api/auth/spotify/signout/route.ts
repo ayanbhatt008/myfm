@@ -1,8 +1,10 @@
+import { withAPIWrapper } from "@/lib/api/api_handler";
 import {createClient} from "@/lib/supabase/server";
 import {NextResponse} from "next/server";
 
 
 export async function GET() {
+    
     const supabase = await createClient();
 
     const {data: {user}, error: userGetError} = await supabase.auth.getUser();

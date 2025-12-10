@@ -5,6 +5,7 @@ import {SpotifyArtist, SpotifyArtistQueryResponse} from "@/lib/types/spotify_typ
 import {mapSpotifyArtistQueryResponse} from "@/lib/spotify/mapper";
 import ArtistQueryCard from "@/lib/ components/artist-query-card";
 import { supabase } from "@/lib/supabase/client";
+import { APIresponse } from "@/lib/types/api_types";
 
 export default function SearchPage() {
     const [queryLoading, setQueryLoading] = useState(false);
@@ -27,8 +28,14 @@ export default function SearchPage() {
         })
 
         const res = await fetch(`api/spotify/artist-query/?${params.toString()}`)
-        const data : SpotifyArtistQueryResponse  = await res.json();
-
+        const data : APIresponse<SpotifyArtistQueryResponse> = await res.json();
+        
+        if (data.error){
+            return;
+        }
+      
+        const data_results : SpotifyArtistQueryResponse = data.data!;
+        setResults(data_results);
         
 
         const res_followed = await fetch(`api/spotify/followed-artists`)
@@ -48,7 +55,7 @@ export default function SearchPage() {
 
 
 
-        setResults(data);
+        
         setQueryLoading(false);
 
 

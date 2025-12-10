@@ -51,8 +51,8 @@ export default function ArtistQueryCard({artist, followed}: {artist : SpotifyArt
         });
 
         const data = await res.json();
-
-        setIsFollowed(!isFollowed);
+        if (data.status == 200)
+            setIsFollowed(!isFollowed);
 
 
     }

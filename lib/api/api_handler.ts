@@ -3,8 +3,8 @@ import {APIerror, APIresponse} from "@/lib/types/api_types";
 import {NextResponse} from "next/server";
 
 export async function withAPIWrapper<E>(
-    handler: (user: {id: string} | null, req : Request) => Promise<E>,
-    req: Request,
+    handler: (user: {id: string} | null, req? : Request) => Promise<E>,
+    req?: Request,
     options?: {requireAuth?: boolean}
 ) {
     let user = null;
