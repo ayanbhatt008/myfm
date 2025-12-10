@@ -1,11 +1,13 @@
 import { createClient } from "@/lib/supabase/server";
 import {NextResponse} from "next/server";
 
-export async function GET(req: Request) {
-    const {searchParams} = new URL(req.url);
-    const artist_id = searchParams.get("artist_id");
-    const user_id = searchParams.get("user_id");
+export async function POST(req: Request) {
+
+    const {artist_id} = await req.json();
+
     const supabase = await createClient();
+    const {data: {user}} = await supabase.auth.getUser();
+    const user_id = user?.id;
 
     await supabase
         .from("artist_follows")

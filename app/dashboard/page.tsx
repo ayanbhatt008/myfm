@@ -1,6 +1,6 @@
 "use client"
 import ArtistDashboardCard from "@/lib/ components/artist-dashboard-card";
-import {SpotifyArtist} from "@/lib/spotify/types";
+import {SpotifyArtist} from "@/lib/types/spotify_types";
 import {useEffect, useState} from "react";
 
 export default function Dashboard() {

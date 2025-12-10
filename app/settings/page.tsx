@@ -3,7 +3,7 @@
 import Image from "next/image";
 
 
-import {SpotifyTopTrackResponse} from "@/lib/spotify/types";
+import {SpotifyTopTrackResponse} from "@/lib/types/spotify_types";
 import {useState, useEffect} from "react";
 import { supabase } from "@/lib/supabase/client";
 import {getSessionData} from "@/lib/session";

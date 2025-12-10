@@ -1,7 +1,7 @@
 "use client"
 
 import {useState} from "react";
-import {SpotifyArtistQueryResponse} from "@/lib/spotify/types";
+import {SpotifyArtistQueryResponse} from "@/lib/types/spotify_types";
 import {mapSpotifyArtistQueryResponse} from "@/lib/spotify/mapper";
 import ArtistQueryCard from "@/lib/ components/artist-query-card";
 import { supabase } from "@/lib/supabase/client";

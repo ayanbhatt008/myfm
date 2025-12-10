@@ -67,11 +67,11 @@ Music Service Stat Tracker
     - Method dealing with Spotify API
       - getAccessToken() : return a refreshed (if needed) access token for use
   - 
-  - "/lib/spotify/types.ts"
+  - "/lib/spotify/spotify_types.ts"
     - Typescript interfaces for converting API data into typed objects
   - 
   - "/lib/spotify/mapper.ts"
-    - Methods dealing with Spotify API data and converting to interfaces defined in "types.ts" 
+    - Methods dealing with Spotify API data and converting to interfaces defined in "spotify_types.ts" 
 
 - "/lib/supabase"
   - 

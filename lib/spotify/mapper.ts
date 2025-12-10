@@ -6,7 +6,7 @@ import {
     SpotifyImage,
     SpotifyTopTrackResponse,
     SpotifyTrack
-} from "@/lib/spotify/types";
+} from "@/lib/types/spotify_types";
 
 
 export function mapSpotifyArtist(artist: any): SpotifyArtist {

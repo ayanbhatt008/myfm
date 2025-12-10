@@ -1,6 +1,6 @@
 
 import { getAppAccessToken } from "@/lib/spotify/appAccessToken";
-import { SpotifyArtist } from "@/lib/spotify/types";
+import { SpotifyArtist } from "@/lib/types/spotify_types";
 import {mapSpotifyArtist } from "@/lib/spotify/mapper"
 import {createClient} from "@/lib/supabase/server";
 import {NextResponse} from "next/server";

@@ -1,6 +1,6 @@
 import {NextResponse} from "next/server";
 import {getAppAccessToken} from "@/lib/spotify/appAccessToken";
-import {SpotifyArtistQueryResponse} from "@/lib/spotify/types";
+import {SpotifyArtistQueryResponse} from "@/lib/types/spotify_types";
 import {mapSpotifyArtistQueryResponse} from "@/lib/spotify/mapper";
 
 

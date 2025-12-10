@@ -1,6 +1,6 @@
 import {getUserAccessToken,} from "@/lib/spotify/userAccessToken";
 import { mapSpotifyTopTracksResponse } from "@/lib/spotify/mapper";
-import { SpotifyTopTrackResponse } from "@/lib/spotify/types";
+import { SpotifyTopTrackResponse } from "@/lib/types/spotify_types";
 import {NextResponse} from "next/server";
 
 

@@ -1,5 +1,5 @@
 "use client"
-import {SpotifyAlbum, SpotifyArtist, SpotifyImage, SpotifyTrack} from "@/lib/spotify/types";
+import {SpotifyAlbum, SpotifyArtist, SpotifyImage, SpotifyTrack} from "@/lib/types/spotify_types";
 import formatNames from "@/lib/utils/format-names";
 import Image from "next/image";
 import { supabase } from "../supabase/client";
@@ -33,15 +33,22 @@ export default function ArtistQueryCard({artist, followed}: {artist : SpotifyArt
 
         const{data: {user}} = await supabase.auth.getUser();
 
-        if (!user)
-            return;
+
 
         const params = new URLSearchParams({
-            user_id: user.id,
+
             artist_id: artist.id
         });
 
-        const res = await fetch(`${url}/?${params.toString()}`);
+        const res = await fetch(`${url}/}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                artist_id: artist.id,
+            })
+        });
 
         const data = await res.json();
 

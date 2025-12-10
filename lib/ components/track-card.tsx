@@ -1,5 +1,5 @@
 "use client"
-import {SpotifyAlbum, SpotifyArtist, SpotifyImage, SpotifyTrack} from "@/lib/spotify/types";
+import {SpotifyAlbum, SpotifyArtist, SpotifyImage, SpotifyTrack} from "@/lib/types/spotify_types";
 import formatNames from "@/lib/utils/format-names";
 import Image from "next/image";
 
