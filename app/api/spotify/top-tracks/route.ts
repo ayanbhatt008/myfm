@@ -2,10 +2,43 @@ import {getUserAccessToken,} from "@/lib/spotify/userAccessToken";
 import { mapSpotifyTopTracksResponse } from "@/lib/spotify/mapper";
 import { SpotifyTopTrackResponse } from "@/lib/types/spotify_types";
 import {NextResponse} from "next/server";
+import { withAPIWrapper } from "@/lib/api/api_handler";
+import { APIresponse } from "@/lib/types/api_types";
 
 
 
-export async function GET(req : Request) {
+export async function GET(req: Request) {
+    return withAPIWrapper(
+        async (user, req) => {
+            const access_token : string = await getUserAccessToken();
+            const {searchParams} = new URL(req.url);
+            const limit = searchParams.get("limit") ?? "2";
+            const time_range = searchParams.get("time_range") ?? "long_term";
+
+            const params = new URLSearchParams({
+                limit: limit,
+                time_range: time_range,
+            });
+
+            const res = await fetch(
+                `https://api.spotify.com/v1/me/top/tracks?${params.toString()}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${access_token}`
+                    }
+                }
+            );
+            const data = await res.json();
+            const response :SpotifyTopTrackResponse = mapSpotifyTopTracksResponse(data);
+
+            return response;
+
+
+        }, req, {requireAuth: true}
+    )
+}
+
+/*export async function GET(req : Request) {
     const access_token : string = await getUserAccessToken();
 
     const {searchParams} = new URL(req.url);
@@ -36,6 +69,6 @@ export async function GET(req : Request) {
 
 
     return NextResponse.json(response);
-}
+}*/
 
 

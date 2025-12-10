@@ -40,7 +40,7 @@ export default function ArtistQueryCard({artist, followed}: {artist : SpotifyArt
             artist_id: artist.id
         });
 
-        const res = await fetch(`${url}/}`, {
+        const res = await fetch(`${url}/`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -64,13 +64,13 @@ export default function ArtistQueryCard({artist, followed}: {artist : SpotifyArt
     return (
         <div className="flex flex-row bg-gray-800 rounded-2xl m-2 p-3 gap-3 w-128 items-center ">
             <div className="w-40 h-40 flex items-center justify-center bg-gray-400 ">
-                <Image
+                {image?.url && <Image
                     src={image.url}
                     alt="Artist Profile Picture"
                     width={image.width}
                     height={image.height}
                     className="object-contain"
-                />
+                />}
             </div>
 
 

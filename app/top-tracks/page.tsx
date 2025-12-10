@@ -16,9 +16,10 @@ export default function TopTracks() {
             });
 
             const res = await fetch(`api/spotify/top-tracks?${params.toString()}`);
-            const json : SpotifyTopTrackResponse = await res.json();
+            const json= await res.json();
 
-            setResponseData(json);
+            if (json.data)
+                setResponseData(json.data);
 
         }
 

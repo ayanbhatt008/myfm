@@ -1,7 +1,7 @@
 "use client"
 
 import {useState} from "react";
-import {SpotifyArtistQueryResponse} from "@/lib/types/spotify_types";
+import {SpotifyArtist, SpotifyArtistQueryResponse} from "@/lib/types/spotify_types";
 import {mapSpotifyArtistQueryResponse} from "@/lib/spotify/mapper";
 import ArtistQueryCard from "@/lib/ components/artist-query-card";
 import { supabase } from "@/lib/supabase/client";
@@ -29,14 +29,12 @@ export default function SearchPage() {
         const res = await fetch(`api/spotify/artist-query/?${params.toString()}`)
         const data : SpotifyArtistQueryResponse  = await res.json();
 
-        const {data: {user}} = await supabase.auth.getUser();
-        const {data: follows, error} = await supabase
-            .from("artist_follows")
-            .select("artist_id")
-            .eq("user_id", user?.id)
+        
 
-
-        const followIds = follows?.map(obj => obj.artist_id) || []
+        const res_followed = await fetch(`api/spotify/followed-artists`)
+        const follows : SpotifyArtist[] = await res_followed.json();
+        
+        const followIds = follows?.map(obj => obj.id) || []
         setFollowIDs(followIds);
 
 
