@@ -28,20 +28,27 @@ export default function SearchPage() {
         })
 
         const res = await fetch(`api/spotify/artist-query/?${params.toString()}`)
-        const data : APIresponse<SpotifyArtistQueryResponse> = await res.json();
+        const data_query : APIresponse<SpotifyArtistQueryResponse> = await res.json();
         
-        if (data.error){
+        if (data_query.error){
             return;
         }
       
-        const data_results : SpotifyArtistQueryResponse = data.data!;
-        setResults(data_results);
+        const data_results : SpotifyArtistQueryResponse = data_query.data!;
+        
         
 
         const res_followed = await fetch(`api/spotify/followed-artists`)
-        const follows : SpotifyArtist[] = await res_followed.json();
+        if (!res_followed.ok)
+            return;
+        const data_follows : APIresponse<SpotifyArtist[]>= await res_followed.json();
+
+        
+        const follows : SpotifyArtist[] = data_follows.data!;
         
         const followIds = follows?.map(obj => obj.id) || []
+
+        setResults(data_results);
         setFollowIDs(followIds);
 
 

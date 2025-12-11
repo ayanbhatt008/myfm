@@ -1,5 +1,6 @@
 "use client"
 import ArtistDashboardCard from "@/lib/ components/artist-dashboard-card";
+import { APIresponse } from "@/lib/types/api_types";
 import {SpotifyArtist} from "@/lib/types/spotify_types";
 import {useEffect, useState} from "react";
 
@@ -11,10 +12,13 @@ export default function Dashboard() {
         async function func() {
             
             const res = await fetch("/api/spotify/followed-artists");
-            const data : SpotifyArtist[] = await res.json();
+            const response :APIresponse< SpotifyArtist[] >= await res.json();
+            if (response.status !== 200)
+                return;
+            const data : SpotifyArtist[] = response.data!;
             const sorted_data = data.sort((a, b) => a.name.localeCompare(b.name))
             
-            setArtistsToDisplay(data);
+            setArtistsToDisplay(sorted_data);
             setLoading(false);
             
 
