@@ -34,7 +34,7 @@ function mapSpotifyImages(images: any): SpotifyImage{
 }
 
 
-function mapSpotifyAlbum(album: any) : SpotifyAlbum {
+export function mapSpotifyAlbum(album: any) : SpotifyAlbum {
     return {
         artists: album.artists.map((artist: any) => mapSpotifyArtist(artist)),
         external_urls: {

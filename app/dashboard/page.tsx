@@ -15,11 +15,15 @@ export default function Dashboard() {
             const response :APIresponse< SpotifyArtist[] >= await res.json();
             if (response.status !== 200)
                 return;
-            const data : SpotifyArtist[] = response.data!;
+            const data : SpotifyArtist[] = response.data! || [];
             const sorted_data = data.sort((a, b) => a.name.localeCompare(b.name))
             
             setArtistsToDisplay(sorted_data);
             setLoading(false);
+
+
+
+
             
 
         }

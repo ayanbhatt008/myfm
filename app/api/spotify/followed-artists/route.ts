@@ -17,10 +17,15 @@ export async function GET(req: Request) {
             .select("artist_id")
             .eq("user_id", user!.id);
 
+
+
         if (id_object_error)
             throw new Error;
 
         const id_array : string[] = id_object?.map((val) => val.artist_id) || [];
+        if (id_array.length === 0)
+            return [];
+
         const id_string : string = id_array.join(",")
 
         const app_token : string = await getAppAccessToken();
@@ -33,6 +38,7 @@ export async function GET(req: Request) {
                 cache: "no-store"
             }
         )
+
         if (!res.ok)
             throw new Error;
         
