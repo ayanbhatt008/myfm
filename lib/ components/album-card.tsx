@@ -5,12 +5,8 @@ import formatNames from "@/lib/utils/format-names";
 
 
 
-export default function AlbumDashboardCard( album : SpotifyAlbum) {
-    // Example values you might use:
-    // const albumName = album.name;
-    // const releaseDate = album.release_date;
-    // const artistNames = album.artists.map(a => a.name).join(", ");
-    // const albumImage = album.images?.[0];
+export default function AlbumCard( {album} : {album : SpotifyAlbum}) {
+    
     const albumImage : SpotifyImage = album.images[album.images.length - 1];
     const albumName = album.name;
     const artistNames = formatNames(album.artists.map(artist => artist.name));
