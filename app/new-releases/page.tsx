@@ -16,8 +16,8 @@ export default function NewReleases() {
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({}),
             });
-            const data2: APIresponse<SpotifyAlbum[]> = await res2.json();
-            console.log(data2);
+            const data2: APIresponse<any> = await res2.json();
+
 
         }
 

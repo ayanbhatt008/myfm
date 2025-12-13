@@ -2,7 +2,12 @@ import {withAPIWrapper} from "@/lib/api/api_handler";
 import {createClient} from "@/lib/supabase/server";
 import {SpotifyAlbum} from "@/lib/types/spotify_types";
 import {getAppAccessToken} from "@/lib/spotify/appAccessToken";
-import {mapSpotifyArtist} from "@/lib/spotify/mapper";
+import {mapSpotifyAlbum, mapSpotifyArtist} from "@/lib/spotify/mapper";
+
+interface supabaseUpsert {
+    metadata: SpotifyAlbum,
+    artist_id: string
+}
 
 export async function POST(req: Request) {
     return withAPIWrapper(async (user, req) => {
@@ -23,12 +28,25 @@ export async function POST(req: Request) {
 
         }
 
+        const refreshes = await Promise.allSettled(ids.map( (id) => fetchLatestRelease(id, app_token)));
+        const validReleases = refreshes
+            .filter(r => r.status === "fulfilled")
+            .map(r => r.value);
+
+
+        const {error} = await supabase
+            .from("artist_releases")
+            .upsert(validReleases, {onConflict: "artist_id"});
+
+        if (error)
+            return error;
+        return true;
 
     }, req, {requireAuth: true})
 }
 
 
-async function refresh(id : string, token : string) : Promise<SpotifyAlbum | null> {
+async function fetchLatestRelease(id : string, token : string) : Promise<supabaseUpsert | null> {
     const params = new URLSearchParams({
         include_groups: "album,single",
         limit: "1"
@@ -44,11 +62,12 @@ async function refresh(id : string, token : string) : Promise<SpotifyAlbum | nul
 
     const data = await res.json();
 
-    const album = mapSpotifyArtist(data);
+    const album = data.items?.[0];
+
+    if (!album)
+        return null;
 
 
-
-
-    return album;
+    return {metadata: mapSpotifyAlbum(album),artist_id: id };
 
 }
