@@ -41,13 +41,13 @@ export async function GET(req: Request) {
         const albums = removeDuplicates(albums_raw);
 
         
-        return albums_raw;  
+        return albums;  
     }, req, {requireAuth: true})
 }
 
 
 function removeDuplicates(raw : SpotifyAlbum[]) : SpotifyAlbum[] {
-    const seen = new Set<string>;
+    const seen = new Set<string>();
 
     const filtered = raw.filter(album => {
         if (seen.has(album.id))

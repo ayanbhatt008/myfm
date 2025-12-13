@@ -10,18 +10,19 @@ export default function AlbumCard( {album} : {album : SpotifyAlbum}) {
     const albumImage : SpotifyImage = album.images[album.images.length - 1];
     const albumName = album.name;
     const artistNames = formatNames(album.artists.map(artist => artist.name));
+    console.log(albumImage)
 
 
 
     return (
-        <div className="flex flex-col bg-gray-800 rounded-2xl m-2 p-3 gap-2 h-48 items-center">
+        <div className="flex flex-col bg-gray-800 rounded-2xl m-2 p-3 gap-2 h-64 items-center">
 
-            <div className="w-24 h-24 flex items-center justify-center bg-gray-400 m-1">
+            <div className="w-32 h-32 flex items-center justify-center bg-gray-400 m-1">
                 <Image
                     src={albumImage.url}
                     alt="Album Cover"
-                    width={100}
-                    height={100}
+                    width={128}
+                    height={128}
                     className="object-contain"
                 />
             </div>
