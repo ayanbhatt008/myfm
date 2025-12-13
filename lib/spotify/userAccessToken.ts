@@ -2,18 +2,20 @@
 import {createClient} from "@/lib/supabase/server";
 
 
-export async function getUserAccessToken(): Promise<string> {
+export async function getUserAccessToken(user_id? : string): Promise<string> {
     const supabase = await createClient();
-    const {data: {user}, error } = await supabase.auth.getUser()
-    if (error)
-        console.log(error);
+    if (!user_id) {
+        const {data: {user}, error } = await supabase.auth.getUser()
+        if (error)
+            console.log(error);
 
-    const internalUUID = user?.id;
+        user_id = user?.id;
+    }
 
     const {data: tokenData} = await supabase
         .from("spotify_tokens")
         .select("*")
-        .eq("user_id", internalUUID)
+        .eq("user_id", user_id)
         .single();
 
     const epoch = tokenData.expires_at;
@@ -48,7 +50,7 @@ export async function getUserAccessToken(): Promise<string> {
             access_token: data.access_token,
             expires_at: Date.now() + data.expires_in * 1000
         })
-        .eq("user_id", internalUUID)
+        .eq("user_id", user_id)
         .select()
         .single();
 
