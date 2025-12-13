@@ -18,8 +18,6 @@ export async function GET(req: Request) {
                 .from("artist_releases")
                 .select("artist_id");
             ids = data?.map(obj => obj.artist_id) || [];
-
-
         }
 
         if (ids.length === 0)
@@ -38,7 +36,9 @@ export async function GET(req: Request) {
         const albums_raw : SpotifyAlbum[] = metadata_array!.map(obj => obj.metadata as SpotifyAlbum)
         
 
-        const albums = removeDuplicates(albums_raw);
+        const albums = filterAlbums(albums_raw);
+
+        albums.sort((a, b) => a.name.localeCompare(b.name))
 
         
         return albums;  
@@ -46,10 +46,12 @@ export async function GET(req: Request) {
 }
 
 
-function removeDuplicates(raw : SpotifyAlbum[]) : SpotifyAlbum[] {
+function filterAlbums(raw : SpotifyAlbum[]) : SpotifyAlbum[] {
     const seen = new Set<string>();
 
     const filtered = raw.filter(album => {
+        if (!album)
+            return false;
         if (seen.has(album.id))
             return false;
         seen.add(album.id);

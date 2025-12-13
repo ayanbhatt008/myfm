@@ -10,7 +10,7 @@ export default function AlbumCard( {album} : {album : SpotifyAlbum}) {
     const albumImage : SpotifyImage = album.images[album.images.length - 1];
     const albumName = album.name;
     const artistNames = formatNames(album.artists.map(artist => artist.name));
-    console.log(albumImage)
+        
 
 
 
