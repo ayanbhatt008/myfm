@@ -16,7 +16,7 @@ export async function getR2Object(bucket : string, key : string) {
         }
     }
     catch (err) {
-        console.error("error getting the r2 obj", err);
+        
         return null;
     }
 }

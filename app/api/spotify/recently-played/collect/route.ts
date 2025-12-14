@@ -4,7 +4,10 @@ import { uploadDailyTracks } from "@/lib/r2/uploadDailyTracks";
 import { getUserAccessToken } from "@/lib/spotify/userAccessToken";
 import { supabase } from "@/lib/supabase/client";
 import { createClient } from "@/lib/supabase/server";
+import { APIerror } from "@/lib/types/api_types";
 import { r2Track } from "@/lib/types/r2_types";
+import { dayKey, dayKeyEST } from "@/lib/utils/dateKeys";
+import { group } from "console";
 
 export async function POST(req: Request) {
     return withAPIWrapper(async (user, req) => {
@@ -34,7 +37,8 @@ export async function POST(req: Request) {
 		const {data: last_played} = await supabase
 			.from("last_played")
 			.select("*")
-			.filter("user_id", "in",  user_ids)
+			.in("user_id", user_ids)
+		
 
 		const last_played_map = new Map(last_played?.map(row => [row.user_id, row.last_played]));
 
@@ -44,26 +48,32 @@ export async function POST(req: Request) {
 				spotify_token: spotify_token.get(user_id)!
 		}));
 
-
+	
 		const data_promises = await Promise.allSettled(
-			map.map(async (value) => ({
-				user_id: value.user_id,
-				tracks: await updatePlays(value)
-			}))
+			map.map(
+				async (value) => await updatePlays(value)
+			)
 		)
 		
 		const data = data_promises.filter(d => d.status === 'fulfilled')
 			.map(d => d.value)
+			.filter(d => d.last_played)
+		
 			
-        console.log(data);
+        const {error: upsertError} = await supabase
+			.from("last_played")
+			.upsert(data);
+		
+        if (upsertError)
+			throw new APIerror(upsertError.message, 500);
+		return null;
         
-        return ;	
     
     }, req, {requireAuth: false});
 }
 
 
-async function updatePlays({user_id, last_played, spotify_token} : {user_id : string, last_played: any, spotify_token : string})  {
+async function updatePlays({user_id, last_played, spotify_token} : {user_id : string, last_played: any, spotify_token : string}) : Promise<updatePlaysReturn> {
 	const res = await fetch ("https://api.spotify.com/v1/me/player/recently-played?limit=50", {
 		headers: {
 			"Authorization":`Bearer ${spotify_token}`,
@@ -71,22 +81,62 @@ async function updatePlays({user_id, last_played, spotify_token} : {user_id : st
 		}
 	});
 
+	
+
+	if (!res.ok)
+		throw new APIerror("Spotify Failed", 500);
+
 	const data = await res.json();
 	
-	const typed_data = data.items.map((val: any) => mapToR2Track(val))
+	const typed_data : r2Track[] = data.items.map((val: any) => mapToR2Track(val))
 
-	//await uploadDailyTracks(user_id, typed_data)
+	
+	
+	
+
+	const last_played_date = last_played ? new Date(last_played) : null;
+	
+	
+	const filtered_plays : r2Track[] = last_played_date
+		? typed_data.filter(
+			(val) => new Date(val.played_at) > last_played_date
+		) : typed_data;
+
+	
+	
+	const groupedByDay = Object.values(groupTracksByDay(filtered_plays))
+	
+	
+	
+	const uploads = await Promise.allSettled(
+		groupedByDay.map(async (val) =>
+			await uploadDailyTracks(user_id, val)
+		)
+	)
+
+	
 
 	
 	
 	
 	return {
 		user_id: user_id,
-		last_played: new Date().toISOString(),
+		last_played: filtered_plays.length > 0 ? filtered_plays[0].played_at : last_played,
 	};
+}
+
+function groupTracksByDay(tracks : r2Track[]) {
+	return tracks.reduce((tracksByDay, track) => {
+		const day = dayKeyEST(track.played_at);
+		if (!tracksByDay[day])
+			tracksByDay[day] = [];
+
+		tracksByDay[day].push(track);
+		return tracksByDay;
+	}, {} as Record<string, r2Track[]>);
 }
 
 interface updatePlaysReturn {
 	user_id: string,
-	last_played: string,
+	last_played: string | null,
 }
