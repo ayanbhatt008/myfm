@@ -9,7 +9,7 @@ export async function uploadDailyTracks(user_id: string, tracks :   r2Track[]) {
 
     
 
-    const dateFolder = dayKeyEST(new Date(tracks[0].played_at).toISOString());
+    const dateFolder = dayKey(new Date(tracks[0].played_at).toISOString());
     const key = `user/${user_id}/${dateFolder}.json`;
 
     let existing : r2Track[] = [];

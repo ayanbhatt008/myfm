@@ -10,10 +10,10 @@ export async function getR2Object(bucket : string, key : string) {
 
     try {
         const {Body} = await r2Client.send(command);
-        if (Body) {
-            const text = await streamToString(Body);
-            return text;
-        }
+        if (!Body)
+          return null;
+
+        return await Body.transformToString();
     }
     catch (err) {
         
@@ -21,27 +21,7 @@ export async function getR2Object(bucket : string, key : string) {
     }
 }
 
-async function streamToString(stream: any): Promise<string> {
-  const reader = stream.getReader();
-  const chunks: Uint8Array[] = [];
-  let done = false;
 
-  while (!done) {
-    const result = await reader.read();
-    done = result.done ?? true;
-    if (result.value) chunks.push(result.value);
-  }
-
-  const totalLength = chunks.reduce((sum, arr) => sum + arr.length, 0);
-  const mergedArray = new Uint8Array(totalLength);
-  let offset = 0;
-  for (const chunk of chunks) {
-    mergedArray.set(chunk, offset);
-    offset += chunk.length;
-  }
-
-  return new TextDecoder().decode(mergedArray);
-}
 
 export async function uploadR2Object(
   bucket: string,

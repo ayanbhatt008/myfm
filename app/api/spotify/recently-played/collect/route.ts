@@ -127,7 +127,7 @@ async function updatePlays({user_id, last_played, spotify_token} : {user_id : st
 
 function groupTracksByDay(tracks : r2Track[]) {
 	return tracks.reduce((tracksByDay, track) => {
-		const day = dayKeyEST(track.played_at);
+		const day = dayKey(track.played_at);
 		if (!tracksByDay[day])
 			tracksByDay[day] = [];
 
