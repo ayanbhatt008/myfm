@@ -1,7 +1,7 @@
     import { withAPIWrapper } from "@/lib/api/api_handler";
     import { getR2Object } from "@/lib/r2/helper";
     import { updateSession } from "@/lib/supabase/proxy";
-    import { r2Track } from "@/lib/types/r2_types";
+    import { r2Track, tracksOnDay } from "@/lib/types/r2_types";
     import { dayKey } from "@/lib/utils/dateKeys";
     export async function GET(req: Request) {
         return withAPIWrapper( async (user, req) => {
@@ -100,7 +100,4 @@
         return days
     }
 
-    interface tracksOnDay {
-        r2DateKey: string,
-        tracks: r2Track[],
-    }
+    

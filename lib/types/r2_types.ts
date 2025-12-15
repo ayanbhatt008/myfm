@@ -12,3 +12,7 @@ export interface r2Item {
     id: string,
 }
 
+export interface tracksOnDay {
+        r2DateKey: string,
+        tracks: r2Track[],
+    }
