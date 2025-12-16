@@ -56,9 +56,11 @@ export default function RecentPlays() {
 
     return (
         <div>
-            <button onClick={refreshPlays}>
-                REFRESH
-            </button>
+            <div className = {"flex items-center justify-center"}> 
+                <button onClick={refreshPlays} className = {"rounded-xl bg-white text-black text-center p-4 m-4"}>
+                    REFRESH
+                </button>
+            </div>
             {responseData.map((day) => (
                 <div key={day.r2DateKey} className="mb-6">
                     <h2 className="text-xl font-bold text-muted-foreground mb-2 text-center">
