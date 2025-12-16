@@ -9,18 +9,37 @@ import { r2Track } from "@/lib/types/r2_types";
 import { dayKey, dayKeyEST } from "@/lib/utils/dateKeys";
 import { group } from "console";
 
-export async function POST(req: Request) {
+export async function POST(req: Request) {	
     return withAPIWrapper(async (user, req) => {
         const supabase = await createClient();
 
-        const {data: user_ids_objs} = await supabase
+		const body = await req?.json();
+		const userID : string[] = body.userID;
+		
+		
+		let user_ids : string[] = [];
+
+		
+		
+
+		if (userID)
+			user_ids = userID;
+		
+		else {			
+			const {data: user_ids_objs} = await supabase
             .from("spotify_tokens")
             .select("user_id")
         
-        if (!user_ids_objs)
-            return;
-        const user_ids = user_ids_objs.map((user_id_obj) => user_id_obj.user_id);
+        	if (!user_ids_objs)
+        	    return;
+        	user_ids = user_ids_objs.map((user_id_obj) => user_id_obj.user_id);
 
+			
+		}
+		
+		
+		
+        
         const spotify_tokens_promises = await Promise.allSettled(user_ids.map(async (userid) => ({
 			spotify_token: await getUserAccessToken(userid),
 			user_id: userid,
@@ -56,6 +75,7 @@ export async function POST(req: Request) {
 		)
 
         data_promises.forEach((value) => {
+			
             if (value.status === 'rejected')
                 throw new APIerror(value.reason, 500)
         })

@@ -1,5 +1,7 @@
 "use client"
 import TrackNanoCard from "@/lib/ components/track-nano-card";
+import { getAppAccessToken } from "@/lib/spotify/appAccessToken";
+import { supabase } from "@/lib/supabase/client";
 import { APIresponse } from "@/lib/types/api_types";
 import { r2Item, r2Track, tracksOnDay } from "@/lib/types/r2_types";
 import { dayKeyLocal } from "@/lib/utils/dateKeys";
@@ -8,6 +10,9 @@ import { useEffect, useState } from "react";
 export default function RecentPlays() {
 
     const [responseData, SetResponseData] = useState<tracksOnDay[] | null>();
+    const [refreshCounter, setRefreshCounter] = useState<number>(0);
+
+
     useEffect(() => {
         async function func() {
             const params = new URLSearchParams({
@@ -26,7 +31,20 @@ export default function RecentPlays() {
         }
 
         func();
-    }, [])
+    }, [refreshCounter])
+
+    async function refreshPlays() {
+        const {data: {user}} = await supabase.auth.getUser();
+        const res = await fetch("/api/spotify/recently-played/collect", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({userID: [user?.id]}),
+        });
+
+        setRefreshCounter(prev => prev + 1);
+    }   
+
+
     if (responseData == null)
         return (
             <div>
@@ -38,6 +56,9 @@ export default function RecentPlays() {
 
     return (
         <div>
+            <button onClick={refreshPlays}>
+                REFRESH
+            </button>
             {responseData.map((day) => (
                 <div key={day.r2DateKey} className="mb-6">
                     <h2 className="text-xl font-bold text-muted-foreground mb-2 text-center">
