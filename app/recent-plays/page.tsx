@@ -11,17 +11,17 @@ export default function RecentPlays() {
     useEffect(() => {
         async function func() {
             const params = new URLSearchParams({
-                startTime: "2025-12-14T23:57:42.739Z",
-                endTime: "2025-12-15T01:21:05.527Z"
+                startTime: "2025-12-13T23:57:42.739Z",
+                endTime: "2025-12-17T01:21:05.527Z"
             })
 
             const res = await fetch(`/api/r2/recently-played?${params.toString()}`);
             const data : APIresponse<tracksOnDay[]> = await res.json();
             
             const timezonedTracks = UTCtoLocal(data.data!);
-            console.log(timezonedTracks)
+            
 
-            SetResponseData(data.data);
+            SetResponseData(timezonedTracks);
            
         }
 
@@ -34,19 +34,33 @@ export default function RecentPlays() {
             </div>
         );
 
+    let c = -1;
+
     return (
         <div>
-            {responseData[0].tracks.map(
-                (track : r2Track) => <TrackNanoCard track={track} key ={track.played_at}/>
-            )}
+            {responseData.map((day) => (
+                <div key={day.r2DateKey} className="mb-6">
+                    <h2 className="text-xl font-bold text-muted-foreground mb-2 text-center">
+                        {day.r2DateKey}
+                    </h2>
+
+                    {day.tracks.map((track: r2Track) => (
+                        <TrackNanoCard
+                            track={track}
+                            key={c++}
+                        />
+                    ))}
+                </div>
+            ))}
         </div>
-    )
+    );
 }
 
 
 function UTCtoLocal(data : tracksOnDay[]) {
     const days = new Map<string, r2Track[]>();
     const allTracks : r2Track[] = data.reduce((array, currData) => array.concat(currData.tracks), [] as r2Track[])
+        .sort((a, b) => (a.played_at < a.played_at ? 1 : -1))
     
     allTracks.forEach((val) => {
         const dayKey = dayKeyLocal(val.played_at);
@@ -57,7 +71,13 @@ function UTCtoLocal(data : tracksOnDay[]) {
 
         days.get(dayKey)!.push(val);
         
-    })
-    console.log(days);
-    return allTracks
+    });
+
+
+    const allTracks_mappedTo_tracksOnDay : tracksOnDay[] = [...days].map(([key, value]) => ({
+        r2DateKey: key,
+        tracks: value
+    })).sort((a,b) => (a.r2DateKey > b.r2DateKey ? -1 : 1))
+
+    return allTracks_mappedTo_tracksOnDay;
 }

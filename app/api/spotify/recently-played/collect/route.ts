@@ -54,18 +54,29 @@ export async function POST(req: Request) {
 				async (value) => await updatePlays(value)
 			)
 		)
+
+        data_promises.forEach((value) => {
+            if (value.status === 'rejected')
+                throw new APIerror(value.reason, 500)
+        })
 		
 		const data = data_promises.filter(d => d.status === 'fulfilled')
 			.map(d => d.value)
 			.filter(d => d.last_played)
-		
-			
+
+
+
+
         const {error: upsertError} = await supabase
 			.from("last_played")
 			.upsert(data);
+
+
 		
         if (upsertError)
 			throw new APIerror(upsertError.message, 500);
+
+
 		return null;
         
     
@@ -81,17 +92,19 @@ async function updatePlays({user_id, last_played, spotify_token} : {user_id : st
 		}
 	});
 
+
+
 	
 
 	if (!res.ok)
-		throw new APIerror("Spotify Failed", 500);
+		throw new Error(`Spotify Api Error`)
 
 	const data = await res.json();
 	
 	const typed_data : r2Track[] = data.items.map((val: any) => mapToR2Track(val))
 
 	
-	
+
 	
 
 	const last_played_date = last_played ? new Date(last_played) : null;
@@ -107,7 +120,7 @@ async function updatePlays({user_id, last_played, spotify_token} : {user_id : st
 	const groupedByDay = Object.values(groupTracksByDay(filtered_plays))
 	
 	
-	
+
 	const uploads = await Promise.allSettled(
 		groupedByDay.map(async (val) =>
 			await uploadDailyTracks(user_id, val)
