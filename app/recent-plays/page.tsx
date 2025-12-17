@@ -1,5 +1,6 @@
 "use client"
 import DateRange from "@/lib/ components/date-pickers/date-range";
+import DateTimeRange from "@/lib/ components/date-pickers/date-time-select";
 import SingleDate from "@/lib/ components/date-pickers/single-date-select";
 import TrackNanoCard from "@/lib/ components/track-nano-card";
 import { getAppAccessToken } from "@/lib/spotify/appAccessToken";
@@ -22,6 +23,8 @@ export default function RecentPlays() {
     useEffect(() => {
         async function func() {
             console.log(range);
+            
+            
 
             const params = new URLSearchParams({
                 startTime: range[0],
@@ -65,7 +68,7 @@ export default function RecentPlays() {
 
     return (
         <div>
-            <SingleDate
+            <DateTimeRange
                 setRange={setRange}
             />
 
