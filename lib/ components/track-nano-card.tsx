@@ -4,7 +4,7 @@ import formatNames from "../utils/format-names";
 export default function TrackNanoCard({ track }: { track: r2Track }) {
     const trackName = track.name;
     const artistArr = track.artists.map(artist => artist.name);
-    const artistName = formatNames(artistArr);
+    const artistName = formatNames(artistArr, 2);
 
     const datePlayed = new Date(track.played_at);
     const datePlayed_String : string = `${datePlayed.toLocaleTimeString()}`

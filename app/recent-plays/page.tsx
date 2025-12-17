@@ -21,7 +21,7 @@ export default function RecentPlays() {
 
     useEffect(() => {
         async function func() {
-            
+            console.log(range);
 
             const params = new URLSearchParams({
                 startTime: range[0],
