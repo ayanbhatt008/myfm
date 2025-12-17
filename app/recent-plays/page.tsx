@@ -1,4 +1,6 @@
 "use client"
+import DateRange from "@/lib/ components/date-pickers/date-range";
+import SingleDate from "@/lib/ components/date-pickers/single-date-select";
 import TrackNanoCard from "@/lib/ components/track-nano-card";
 import { getAppAccessToken } from "@/lib/spotify/appAccessToken";
 import { supabase } from "@/lib/supabase/client";
@@ -13,11 +15,17 @@ export default function RecentPlays() {
     const [refreshCounter, setRefreshCounter] = useState<number>(0);
 
 
+    
+    const [range, setRange] = useState<[string,string]>(["2025-12-13T23:57:42.739Z", "2025-12-20T01:21:05.527Z"]);
+
+
     useEffect(() => {
         async function func() {
+            
+
             const params = new URLSearchParams({
-                startTime: "2025-12-13T23:57:42.739Z",
-                endTime: "2025-12-17T01:21:05.527Z"
+                startTime: range[0],
+                endTime: range[1]
             })
 
             const res = await fetch(`/api/r2/recently-played?${params.toString()}`);
@@ -31,7 +39,7 @@ export default function RecentPlays() {
         }
 
         func();
-    }, [refreshCounter])
+    }, [refreshCounter, range])
 
     async function refreshPlays() {
         const {data: {user}} = await supabase.auth.getUser();
@@ -42,7 +50,8 @@ export default function RecentPlays() {
         });
 
         setRefreshCounter(prev => prev + 1);
-    }   
+    }
+
 
 
     if (responseData == null)
@@ -56,6 +65,10 @@ export default function RecentPlays() {
 
     return (
         <div>
+            <SingleDate
+                setRange={setRange}
+            />
+
             <div className = {"flex items-center justify-center"}> 
                 <button onClick={refreshPlays} className = {"rounded-xl bg-white text-black text-center p-4 m-4"}>
                     REFRESH
