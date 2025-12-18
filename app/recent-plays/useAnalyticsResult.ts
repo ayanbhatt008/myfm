@@ -1,8 +1,12 @@
 import { tracksOnDay } from "@/lib/types/r2_types";
 import { useEffect, useState } from "react";
 
-export function useAnalyticsResult(data : tracksOnDay[] | null, enabled : boolean) {
-    const [analytics, setAnalytics] = useState<any>();
+export interface analyticsProperties {
+    total_tracks: number
+}
+
+export function useAnalyticsResult(data : tracksOnDay[] | null, enabled : boolean) : analyticsProperties | null {
+    const [analytics, setAnalytics] = useState<analyticsProperties | null>(null);
 
     useEffect(() => {
         setAnalytics(null)
@@ -16,7 +20,7 @@ export function useAnalyticsResult(data : tracksOnDay[] | null, enabled : boolea
         if (analytics !== null)
             return;
 
-        const result = computeAnalytics(data);
+        const result : analyticsProperties | null = computeAnalytics(data);
         setAnalytics(result);
         
 
@@ -27,9 +31,13 @@ export function useAnalyticsResult(data : tracksOnDay[] | null, enabled : boolea
     return analytics;
 }
 
-function computeAnalytics(data : null | tracksOnDay[]) : null | number {
+function computeAnalytics(data : null | tracksOnDay[]) : null | analyticsProperties {
     if (!data)
         return null;
 
-    return data.reduce((sum, curr) => sum += curr.tracks.length, 0)
+    const total_tracks = data.reduce((sum, curr) => sum += curr.tracks.length, 0);
+
+    
+
+    return {total_tracks}
 }
