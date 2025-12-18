@@ -19,13 +19,13 @@ export default function TrackNanoCard({ track }: { track: r2Track }) {
     const albumName = track.album.name;
 
     return (
-        <div className="flex w-[1000px] mx-auto items-center justify-between border-b p-3 rounded-xl text-xs">
+        <div className="flex w-[1000px] mx-auto items-center justify-between border p-3 rounded-xl text-xs">
         
-            <div className="flex-1 font-semibold truncate w-25 text-center">
+            <div className="flex-1 font-semibold truncate w-25 text-left">
                 {trackName}
             </div>
 
-            <div className="flex-1 text-sm text-gray-600 truncate w-28 ">
+            <div className="flex-1 text-sm text-gray-600 truncate w-28 text-center">
                 {albumName}
             </div>
 

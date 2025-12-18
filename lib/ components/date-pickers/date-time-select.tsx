@@ -2,33 +2,41 @@ import { DateTimePicker } from "@mantine/dates";
 import { stringFromBase64URL } from "@supabase/ssr";
 import { useEffect, useState } from "react";
 
+
+const INVALID_STRING = 'INVALID_TIME';
 interface useStateProps {
     
     setRange: React.Dispatch<React.SetStateAction<[string, string]>>,
 }
 
 export default function DateTimeRange({setRange} : useStateProps) {
-    const [value, setValue] = useState<any>(null);
+    const [startTime, setStartTime] = useState<string | null>(null);
 
     
 
     useEffect(() => {
-        
-        console.log(value);
+        if (!startTime)
+            return;
+        const startISO : string = parseDateString(startTime);
+
+        if (startISO === INVALID_STRING)
+            return;
+
+        console.log(parseDateString(startTime));
 
         
         
         
         
-    }, [value]);
+    }, [startTime]);
 
     return (
         <div className="bg-white text-black"> 
             <DateTimePicker
                 label="Pick Date & Time"
                 placeholder="Pick Date & Time"
-                value={value}
-                onChange={setValue}
+                value={startTime}
+                onChange={setStartTime}
                 timePickerProps={{
                     withDropdown: true,
                     popoverProps: { withinPortal: false },
@@ -40,17 +48,14 @@ export default function DateTimeRange({setRange} : useStateProps) {
 }
 
 
-function parseDateStringsToLocal(dates : (string | null)[]): (string | null)[]{
+function parseDateString(data : string): string
+{
+    const [date , time]  = data.split(" ");
     
-    const dateRanges = dates.map((val, index) => {
+    if (time === '00:00:00')
+        return INVALID_STRING;
 
-        if (!val)
-            return null;
-        const [YY, MM, DD] = val.split("-").map(Number);
+    //const [YY, MM, DD] 
 
-        return new Date(YY, MM-1, DD + index).toISOString();
-
-    })
-
-    return dateRanges;
+    return time;
 }

@@ -2,12 +2,14 @@ import { DatePickerInput } from "@mantine/dates";
 import { stringFromBase64URL } from "@supabase/ssr";
 import { useEffect, useState } from "react";
 
-interface useStateProps {
+interface Props {
     
     setRange: React.Dispatch<React.SetStateAction<[string, string]>>,
+    minDate: string | Date,
+    maxDate: string | Date,
 }
 
-export default function SingleDate({setRange} : useStateProps) {
+export default function SingleDate({setRange, minDate, maxDate} : Props) {
     const [value, setValue] = useState<string | null>(null);
 
     

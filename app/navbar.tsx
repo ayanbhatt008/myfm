@@ -21,7 +21,7 @@ export default function NavBar() {
 
 
     return (
-        <nav className="bg-background border-b border-foreground/20 backdrop-blur-md">
+        <nav className="bg-background border-b border-foreground/20 backdrop-blur-md text-white">
             <div className="max-w-screen-xl mx-auto flex items-center justify-between px-6 py-4">
 
                 <div className={"font-bold text-lg"}> My.FM</div>

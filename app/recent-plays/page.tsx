@@ -8,41 +8,28 @@ import { supabase } from "@/lib/supabase/client";
 import { APIresponse } from "@/lib/types/api_types";
 import { r2Item, r2Track, tracksOnDay } from "@/lib/types/r2_types";
 import { dayKeyLocal } from "@/lib/utils/dateKeys";
+import { Tabs, TabsList } from "@mantine/core";
+import { init } from "next/dist/compiled/webpack/webpack";
 import { useEffect, useState } from "react";
+import DateSelector from "./date-selector";
+import PlaysHistory from "./play-history";
+import { useRecentPlays } from "./usePlayHistory";
+
+const MIN_DATE_STRING = "2025-12-14"
 
 export default function RecentPlays() {
 
-    const [responseData, SetResponseData] = useState<tracksOnDay[] | null>();
-    const [refreshCounter, setRefreshCounter] = useState<number>(0);
+    
+    
 
 
     
-    const [range, setRange] = useState<[string,string]>(["2025-12-13T23:57:42.739Z", "2025-12-20T01:21:05.527Z"]);
+    const [init_start, init_end] = initRange();
+    
+    const [range, setRange] = useState<[string,string]>([init_start, init_end]);
+    const {data: responseData, loading, refresh : refreshHistory} = useRecentPlays(range);
 
-
-    useEffect(() => {
-        async function func() {
-            console.log(range);
-            
-            
-
-            const params = new URLSearchParams({
-                startTime: range[0],
-                endTime: range[1]
-            })
-
-            const res = await fetch(`/api/r2/recently-played?${params.toString()}`);
-            const data : APIresponse<tracksOnDay[]> = await res.json();
-            
-            const timezonedTracks = UTCtoLocal(data.data!);
-            
-
-            SetResponseData(timezonedTracks);
-           
-        }
-
-        func();
-    }, [refreshCounter, range])
+    
 
     async function refreshPlays() {
         const {data: {user}} = await supabase.auth.getUser();
@@ -52,7 +39,7 @@ export default function RecentPlays() {
                 body: JSON.stringify({userID: [user?.id]}),
         });
 
-        setRefreshCounter(prev => prev + 1);
+        refreshHistory();
     }
 
 
@@ -64,12 +51,14 @@ export default function RecentPlays() {
             </div>
         );
 
-    let c = -1;
+    
 
     return (
         <div>
-            <DateTimeRange
+            <DateSelector
                 setRange={setRange}
+                minDate={MIN_DATE_STRING}
+                maxDate={init_end}
             />
 
             <div className = {"flex items-center justify-center"}> 
@@ -77,46 +66,39 @@ export default function RecentPlays() {
                     REFRESH
                 </button>
             </div>
-            {responseData.map((day) => (
-                <div key={day.r2DateKey} className="mb-6">
-                    <h2 className="text-xl font-bold text-muted-foreground mb-2 text-center">
-                        {day.r2DateKey}
-                    </h2>
 
-                    {day.tracks.map((track: r2Track) => (
-                        <TrackNanoCard
-                            track={track}
-                            key={c++}
-                        />
-                    ))}
-                </div>
-            ))}
+            <Tabs defaultValue={"plays"}> 
+
+                <Tabs.List>
+                    <Tabs.Tab value = "plays    "> 
+                        History
+                    </Tabs.Tab>
+                </Tabs.List>
+
+
+
+                <Tabs.Panel value = "plays">
+                    <PlaysHistory
+                        responseData={responseData}
+                    />
+                </Tabs.Panel>
+            </Tabs>
+            
         </div>
     );
 }
 
 
-function UTCtoLocal(data : tracksOnDay[]) {
-    const days = new Map<string, r2Track[]>();
-    const allTracks : r2Track[] = data.reduce((array, currData) => array.concat(currData.tracks), [] as r2Track[])
-        .sort((a, b) => (a.played_at < a.played_at ? 1 : -1))
-    
-    allTracks.forEach((val) => {
-        const dayKey = dayKeyLocal(val.played_at);
-
-        if (!days.has(dayKey)) {
-            days.set(dayKey, [] as r2Track[]);
-        }
-
-        days.get(dayKey)!.push(val);
-        
-    });
 
 
-    const allTracks_mappedTo_tracksOnDay : tracksOnDay[] = [...days].map(([key, value]) => ({
-        r2DateKey: key,
-        tracks: value
-    })).sort((a,b) => (a.r2DateKey > b.r2DateKey ? -1 : 1))
-
-    return allTracks_mappedTo_tracksOnDay;
+function initRange() : [string, string] {
+    const d : Date = new Date();
+    d.setMilliseconds(0);
+    d.setSeconds(0);
+    d.setMinutes(0);
+    d.setHours(0);
+    const init_start : string = d.toISOString();
+    d.setDate(d.getDate() + 1);
+    const init_end : string = d.toISOString();
+    return [init_start, init_end]
 }
