@@ -14,20 +14,16 @@ import { useEffect, useState } from "react";
 import DateSelector from "./date-selector";
 import PlaysHistory from "./play-history";
 import { useRecentPlays } from "./usePlayHistory";
+import HistoryTabs from "./history-tabs";
 
 const MIN_DATE_STRING = "2025-12-14"
 
-export default function RecentPlays() {
-
-    
-    
-
-
-    
+export default function RecentPlays() {  
     const [init_start, init_end] = initRange();
-    
     const [range, setRange] = useState<[string,string]>([init_start, init_end]);
     const {data: responseData, loading, refresh : refreshHistory} = useRecentPlays(range);
+    
+
 
     
 
@@ -67,22 +63,10 @@ export default function RecentPlays() {
                 </button>
             </div>
 
-            <Tabs defaultValue={"plays"}> 
-
-                <Tabs.List>
-                    <Tabs.Tab value = "plays    "> 
-                        History
-                    </Tabs.Tab>
-                </Tabs.List>
-
-
-
-                <Tabs.Panel value = "plays">
-                    <PlaysHistory
-                        responseData={responseData}
-                    />
-                </Tabs.Panel>
-            </Tabs>
+            <HistoryTabs
+                data={responseData}
+            />
+            
             
         </div>
     );

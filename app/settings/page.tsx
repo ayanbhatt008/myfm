@@ -8,7 +8,7 @@ import {useState, useEffect} from "react";
 import { supabase } from "@/lib/supabase/client";
 import {getSessionData} from "@/lib/session";
 import {useRouter} from "next/navigation"
-import { useSpotifyAuth } from "@/lib/hooks/useSpotifyAuth";
+import { useSpotifyAuth } from "@/app/settings/useSpotifyAuth";
 
 export default  function Settings() {
 
