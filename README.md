@@ -14,6 +14,13 @@ A personal music companion app that tracks your Spotify listening habits and hel
 - Tailwind CSS
 - Supabase
 - Spotify API
+- CloudFlare R2
+
+
+## AI Use
+- Limited use on backend
+- Limited use on frontend logic
+- Used on frontend UI/UX
 
 ## Getting Started
 [Add installation instructions here]
