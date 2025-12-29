@@ -21,26 +21,60 @@ export default function HistoryTabs({data} : Props) {
     }
 
     return (
-        <Tabs value={activeTab} onChange={handleTabChange}> 
+        <Tabs value={activeTab} onChange={handleTabChange} className="w-full"> 
 
-            <Tabs.List>
-                <Tabs.Tab value = "plays"> 
+            <Tabs.List className="border-b border-[#76BED0]/20 mb-8">
+                <Tabs.Tab 
+                    value="plays"
+                    styles={{
+                        tab: {
+                            color: 'rgba(255, 255, 255, 0.7)',
+                            fontWeight: 500,
+                            padding: '0.75rem 1.5rem',
+                            transition: 'all 0.2s',
+                            '&:hover': {
+                                color: 'rgba(255, 255, 255, 1)',
+                            },
+                            '&[data-active]': {
+                                color: '#76BED0',
+                                borderColor: '#76BED0',
+                            }
+                        }
+                    }}
+                > 
                     History
                 </Tabs.Tab>
-                <Tabs.Tab value = "analytics">
+                <Tabs.Tab 
+                    value="analytics"
+                    styles={{
+                        tab: {
+                            color: 'rgba(255, 255, 255, 0.7)',
+                            fontWeight: 500,
+                            padding: '0.75rem 1.5rem',
+                            transition: 'all 0.2s',
+                            '&:hover': {
+                                color: 'rgba(255, 255, 255, 1)',
+                            },
+                            '&[data-active]': {
+                                color: '#76BED0',
+                                borderColor: '#76BED0',
+                            }
+                        }
+                    }}
+                >
                     Analytics
                 </Tabs.Tab>
             </Tabs.List>
 
 
 
-            <Tabs.Panel value = "plays">
+            <Tabs.Panel value="plays" className="pt-4">
                 <PlaysHistory
                     responseData={data}
                 />
             </Tabs.Panel>
 
-            <Tabs.Panel value = 'analytics'>
+            <Tabs.Panel value="analytics" className="pt-4">
                 <AnalyticsPage
                     responseData={data}
                     currentTab={activeTab}

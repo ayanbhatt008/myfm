@@ -21,22 +21,27 @@ export default function ArtistDashboardCard({artist}: {artist : SpotifyArtist}) 
 
 
     return (
-        <div className="flex flex-col bg-gray-800 rounded-2xl m-2 p-3 gap-3 h-60 items-center ">
-            <div className="w-40 h-40 flex items-center justify-center bg-gray-400 m-2">
+        <div className="flex flex-col bg-white/5 backdrop-blur-sm border border-[#76BED0]/20 rounded-2xl p-4 gap-4 hover:bg-white/10 hover:border-[#76BED0]/40 transition-all duration-300 shadow-lg items-center">
+            <div className="flex items-center justify-center bg-[#001021]/50 shadow-xl">
                 <Image
                     src={image.url}
                     alt="Artist Profile Picture"
                     width={image.width}
                     height={image.height}
-                    className="object-contain"
                 />
             </div>
 
 
-            <div className="flex flex-col justify-center text-white h-20 w-50">
-                <p className="text-2xl font-semibold">{artistName}</p>
-
-
+            <div className="flex flex-col justify-center text-white text-center w-full space-y-2">
+                <p className="text-xl font-bold text-white truncate">{artistName}</p>
+                <a 
+                    href={external_url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-[#76BED0] hover:text-[#5da8bc] text-sm transition-colors"
+                >
+                    View on Spotify →
+                </a>
             </div>
 
             

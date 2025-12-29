@@ -27,7 +27,7 @@ export default function DateRange({setRange, maxDate, minDate} : Props) {
     }, [value]);
 
     return (
-        <div className="bg-white text-black"> 
+        <div className="bg-white/5 backdrop-blur-sm border border-[#76BED0]/20 rounded-xl p-4"> 
             <DatePickerInput
                 type="range"
                 label="Pick dates range"
@@ -35,9 +35,13 @@ export default function DateRange({setRange, maxDate, minDate} : Props) {
                 value={value}
                 onChange={setValue}
                 allowSingleDateInRange
-
                 maxDate={maxDate}
                 minDate={minDate}
+                classNames={{
+                    label: "text-white font-medium mb-2",
+                    input: "bg-white/10 border-[#76BED0]/30 text-white placeholder-white/50 focus:border-[#76BED0]",
+                    day: "text-white hover:bg-[#76BED0]/20",
+                }}
             />
         </div>
     )

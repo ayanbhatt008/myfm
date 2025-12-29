@@ -19,28 +19,26 @@ export default function TrackNanoCard({ track }: { track: r2Track }) {
     const albumName = track.album.name;
 
     return (
-        <div className="flex w-[1000px] mx-auto items-center justify-between border p-3 rounded-xl text-xs">
+        <div className="flex w-full max-w-5xl mx-auto items-center justify-between bg-white/5 backdrop-blur-sm border border-[#76BED0]/20 p-4 rounded-xl hover:bg-white/10 hover:border-[#76BED0]/40 transition-all duration-300 shadow-lg">
         
-            <div className="flex-1 font-semibold truncate w-25 text-left">
+            <div className="flex-1 font-semibold text-white truncate min-w-0 text-left pr-4">
                 {trackName}
             </div>
 
-            <div className="flex-1 text-sm text-gray-600 truncate w-28 text-center">
+            <div className="flex-1 text-sm text-white/70 truncate min-w-0 text-center px-4">
                 {albumName}
             </div>
 
 
-            <div className="flex-1 text-sm text-gray-600 truncate w-28 text-center">
+            <div className="flex-1 text-sm text-white/70 truncate min-w-0 text-center px-4">
                 {artistName}
             </div>
 
-            {/* Date played */}
-            <div className="text-xs text-gray-500 text-right w-20 ">
+            <div className="text-sm text-[#76BED0] text-right w-24 flex-shrink-0 pl-4">
                 {datePlayed_String}
             </div>
 
-            {/* Duration */}
-            <div className="w-16 text-xs text-gray-500 text-right ">
+            <div className="w-16 text-sm text-white/60 text-right flex-shrink-0 pl-4">
                 {durationString}
             </div>
         </div>

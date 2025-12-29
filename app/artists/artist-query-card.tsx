@@ -2,11 +2,16 @@
 import {SpotifyAlbum, SpotifyArtist, SpotifyImage, SpotifyTrack} from "@/lib/types/spotify_types";
 import formatNames from "@/lib/utils/format-names";
 import Image from "next/image";
-import { supabase } from "../supabase/client";
+import { supabase } from "@/lib/supabase/client";
 import {useState} from "react";
 
+interface Props {
+    artist: SpotifyArtist,
+    followed: boolean,
+    
+}
 
-export default function ArtistQueryCard({artist, followed}: {artist : SpotifyArtist, followed : boolean}) {
+export default function ArtistQueryCard({artist, followed}: Props) {
 
     const [isFollowed, setIsFollowed] = useState(followed);
     /*const trackName : string = track.name;
@@ -31,7 +36,7 @@ export default function ArtistQueryCard({artist, followed}: {artist : SpotifyArt
     const toggleFollow = async () => {
         const url = isFollowed ? 'api/spotify/unfollow' : 'api/spotify/follow';
 
-        const{data: {user}} = await supabase.auth.getUser();
+        
 
 
 
@@ -62,33 +67,38 @@ export default function ArtistQueryCard({artist, followed}: {artist : SpotifyArt
 
 
     return (
-        <div className="flex flex-row bg-gray-800 rounded-2xl m-2 p-3 gap-3 w-128 items-center ">
-            <div className="w-40 h-40 flex items-center justify-center bg-gray-400 ">
+        <div className="flex flex-row bg-white/5 backdrop-blur-sm border border-[#76BED0]/20 rounded-2xl p-4 gap-6 w-full items-center hover:bg-white/10 hover:border-[#76BED0]/40 transition-all duration-300 shadow-lg">
+            <div className="flex-shrink-0 bg-[#001021]/50 shadow-xl">
                 {image?.url && <Image
                     src={image.url}
                     alt="Artist Profile Picture"
                     width={image.width}
                     height={image.height}
-                    className="object-contain"
                 />}
             </div>
 
 
-            <div className="flex flex-col justify-center text-white h-50 w-50">
-                <p className="text-2xl font-semibold">{artistName}</p>
-
-
+            <div className="flex flex-col justify-center text-white flex-1 min-w-0">
+                <p className="text-2xl font-bold text-white truncate">{artistName}</p>
+                <a 
+                    href={external_url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-[#76BED0] hover:text-[#5da8bc] text-sm mt-1 transition-colors"
+                >
+                    View on Spotify →
+                </a>
             </div>
 
-            <div className={"flex flex-col justify-center w-30 h-20"} >
+            <div className="flex-shrink-0">
                 {isFollowed ?
                     <button onClick={toggleFollow}
-                        className={"rounded-2xl text-white bg-amber-500 font-bold p-2 transition hover:bg-amber-700 "}>
+                        className="px-6 py-3 rounded-xl text-[#001021] bg-[#76BED0] font-semibold transition-all hover:bg-[#5da8bc] shadow-lg hover:shadow-[#76BED0]/50 transform hover:scale-105">
                         Unfollow
                     </button>
                     :
                     <button onClick={toggleFollow}
-                        className={"rounded-2xl text-white bg-amber-500 font-bold p-2 transition hover:bg-amber-700 "}>
+                        className="px-6 py-3 rounded-xl text-white bg-white/10 border-2 border-[#76BED0] font-semibold transition-all hover:bg-[#76BED0] hover:text-[#001021] shadow-lg hover:shadow-[#76BED0]/50 transform hover:scale-105">
                         Follow
                     </button>
 
