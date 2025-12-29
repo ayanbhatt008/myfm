@@ -22,8 +22,11 @@ export default function AnalyticsPage({responseData,  currentTab} : Props){
 
     
 
-    const ordered_track_counts = [...analytics.track_counts.entries()].sort((a, b) => b[1] - a[1])
+    const ordered_track_counts = [...analytics.track_counts.entries()].sort((a, b) => b[1] - a[1]);
+    const top_5_tracks = ordered_track_counts.slice(0, 5);
 
+    const ordered_artist_counts = [...analytics.artist_counts.entries()].sort((a, b) => b[1] - a[1]);
+    const top_5_artists = ordered_artist_counts.slice(0, 5);
 
     return (
         <div className="m-10">
@@ -35,8 +38,32 @@ export default function AnalyticsPage({responseData,  currentTab} : Props){
                     {name: 'count', color: 'blue.6'}
                 ]}
                 curveType="natural"
-                
             />
+
+            <div className="mt-10">
+                <h2 className="text-2xl font-bold mb-4">Top 5 Played Tracks</h2>
+                <ol className="list-decimal list-inside">
+                    {top_5_tracks.map(([track, count], index) => (
+                        <li key={index} className="mb-2">
+                            {track} - {count} plays
+                        </li>
+                    ))}
+                </ol> 
+
+            </div>
+
+            <div className="mt-10">
+                <h2 className="text-2xl font-bold mb-4">Top 5 Played Artists</h2>
+                <ol className="list-decimal list-inside">
+                    {top_5_artists.map(([artist, count], index) => (
+                        <li key={index} className="mb-2">
+                            {artist} - {count} plays
+                        </li>
+                    ))}
+                </ol>
+            </div>
+
+
         </div>
     )
 }
