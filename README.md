@@ -15,6 +15,7 @@ A personal music companion app that tracks your Spotify listening habits and hel
 - Supabase
 - Spotify API
 - CloudFlare R2
+- Vercel
 
 ## AI Use
 - Limited use on backend
@@ -115,3 +116,7 @@ A personal music companion app that tracks your Spotify listening habits and hel
 
 8. **Open your browser**
    - Navigate to [http://127.0.0.1:3000/](http://127.0.0.1:3000/)
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 3dfe83bac7d305d09ebddb2687e47026fd4d8ca2
