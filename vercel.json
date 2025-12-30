@@ -1,7 +1,6 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
   "crons": [{
     "path": "/api/spotify/recently-played/collect",
-    "schedule": "0 * * * *"
+    "schedule": "0 0 * * *"
   }]
 }
