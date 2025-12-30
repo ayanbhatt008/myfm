@@ -15,6 +15,7 @@ A personal music companion app that tracks your Spotify listening habits and hel
 - Supabase
 - Spotify API
 - CloudFlare R2
+- Vercel
 
 ## AI Use
 - Limited use on backend
