@@ -34,7 +34,7 @@ A personal music companion app that tracks your Spotify listening habits and hel
 
 1. **Clone the repository**
 ```bash
-   git clone https://github.com/yourusername/your-repo.git
+   git clone https://github.com/ayanbhatt008/myfm.git
    cd your-repo
 ```
 
@@ -115,4 +115,3 @@ A personal music companion app that tracks your Spotify listening habits and hel
 
 8. **Open your browser**
    - Navigate to [http://127.0.0.1:3000/](http://127.0.0.1:3000/)
-    

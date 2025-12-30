@@ -38,7 +38,7 @@ export default function Home() {
                             Recent Plays
                         </a>
                         <a 
-                            href="https://github.com/yourusername/your-repo" 
+                            href="https://github.com/ayanbhatt008/myfm" 
                             target="_blank" 
                             rel="noopener noreferrer"
                             className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl border border-[#76BED0]/30 hover:border-[#76BED0]/60 transition-all duration-300 transform hover:scale-105 flex items-center gap-2"
